@@ -1,2 +1,2 @@
-# analyses-gdn.github.io
+# analyses-gdn
 Analyses des données du Grand Débat National
