@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <body>
-<h4 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse des données du Grand Débat Nationale </h4>
+<h1 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse des données du Grand Débat Nationale </h1>
+<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse Descriptive </h2>
 <div class="row white">
 		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
 		<div>
@@ -24,7 +25,8 @@
 		</div>
 	</div>
 <div id="map"></div>
-<p id="demo"></p>
+<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse par traitement automatique de langage naturel</h2>
+<div id="network"></div>
 <link rel="stylesheet" href="color_panel.css">
 <link rel="stylesheet" href="https://fonts.gstatic.com/s/montserrat/v12/JTURjIg1_i6t8kCHKm45_c5H3gnD_g.woff2">
 <style>
@@ -120,7 +122,7 @@ Promise.all(promises).then(function(values) {
 
 	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
 	var quantile = d3.scaleQuantile()
-		.domain([0, d3.max(csv, function(e) { return +e[data_selected]; })])
+		.domain([ d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
 		.range(d3.range(9));
 
 	var legend = svg.append('g')
@@ -137,7 +139,7 @@ Promise.all(promises).then(function(values) {
 		.attr("class", function(d) { return "q" + d + "-9"; });
 			
 	var legendScale = d3.scaleLinear()
-		.domain([0, d3.max(csv, function(e) { return +e[data_selected]; })])
+		.domain([d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
 		.range([0, 9 * 20]);
 		
 	var legendAxis = svg.append("g")
@@ -165,9 +167,18 @@ Promise.all(promises).then(function(values) {
 	});
 });
 
+
+var dic_color = {};
+dic_color["Population"]="Blues";
+dic_color["Count_all"]="Blues";
+dic_color["Count_pourmil"]="Reds";
+dic_color["perc_fisca"]="Reds";
+dic_color["perc_ecolo"]="Greens";
+dic_color["perc_cit"]="Greys";
+dic_color["perc_etat"]="Purples";
 // Refresh colors on combo selection
 d3.select("select").on("change", function() {
-	//d3.selectAll("svg").attr("class", this.value);
+	d3.selectAll("svg").attr("class", dic_color[this.value]);
 	data_selected=this.value;
 	
 svg.selectAll("*").remove();
@@ -185,7 +196,7 @@ Promise.all(promises).then(function(values) {
 
 	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
 	var quantile = d3.scaleQuantile()
-		.domain([0, d3.max(csv, function(e) { return +e[data_selected]; })])
+		.domain([d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
 		.range(d3.range(9));
 
 	var legend = svg.append('g')
@@ -202,7 +213,7 @@ Promise.all(promises).then(function(values) {
 		.attr("class", function(d) { return "q" + d + "-9"; });
 			
 	var legendScale = d3.scaleLinear()
-		.domain([0, d3.max(csv, function(e) { return +e[data_selected]; })])
+		.domain([ d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
 		.range([0, 9 * 20]);
 		
 	var legendAxis = svg.append("g")
