@@ -72,6 +72,11 @@ div.tooltip {
 	margin: auto;
 }
 
+#svgn {
+	display: block;
+	margin: auto;
+}
+
 .footer {
 	text-align: center;
 	font-weight: 300;
@@ -113,8 +118,7 @@ var promises = [];
 promises.push(d3.json('france.json'));
 promises.push(d3.csv("GN_conso_dep_level.csv"));
 
-var geojson = promises[0];
-const csv = promises[1];
+
 var data_selected= "Count_pourmil";
 
 
@@ -257,6 +261,57 @@ Promise.all(promises).then(function(values) {
 var div = d3.select("body").append("div")   
 	.attr("class", "tooltip")               
 	.style("opacity", 0);
+
+
+//---------------------------------------
+
+const svgn = d3.select('#network').append("svg")
+	.attr("id", "svgn")
+	.attr("width", width)
+	.attr("height", height);
+	
+
+
+var promises_n = [];
+promises_n.push(d3.csv("embeddings_ecolo.csv"));
+Promise.all(promises_n).then(function(values) {
+	
+	const csv = values[0];
+	var linear_x= d3.scaleLinear()
+		.domain([d3.min(csv, function(e) { return +e["0"]; }), d3.max(csv, function(e) { return +e["0"]; })])
+		.range([0,width]);
+	var linear_y= d3.scaleLinear()
+		.domain([d3.min(csv, function(e) { return +e["1"]; }), d3.max(csv, function(e) { return +e["1"]; })])
+		.range([0,height]);
+	var features = svgn
+		.selectAll("circle")
+		.data(csv)
+		.enter()
+		.append("circle")
+		.attr('cx', width/2)
+		.attr("cy", height/2)
+   		.attr("r", .5)
+		.style("opacity", .8)
+		.style("fill","#8bb1ef")
+		.on("mouseover", function(d) {
+				div.transition()        
+					.duration(200)      
+					.style("opacity", .9);
+				div.html(d["word"])
+					.style("left", (d3.event.pageX + 30) + "px")     
+					.style("top", (d3.event.pageY - 30) + "px")
+					.style("height","15px");
+			});
+	
+	features.transition()
+			.duration(8000)
+			.attr('cx', function(d) {return linear_x(d["0"]);})
+			.attr("cy", function(d) {return linear_y(d["1"]);})
+			.each('start',function(){ d3.select(this).style("opacity", "0.2"); })
+			.each('end',  function(){ d3.select(this).style("opacity", "0.8"); });
+		
+});
+		
 </script>
 </body>
 
