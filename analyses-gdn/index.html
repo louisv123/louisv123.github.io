@@ -10,7 +10,7 @@
 				<fieldset>
 					<div>
 						<label for="male">Donnée</label>
-						<select>
+						<select id="select_map">
 							<option value="Population">Population</option>
 							<option value="Count_all"]>Nbr de contribution</option>
 							<option value="Count_pourmil" selected="selected">Nbr de contribution pour 1000 hbts</option>
@@ -25,9 +25,52 @@
 		</div>
 	</div>
 <div id="map"></div>
-<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse par traitement automatique du langage naturel</h2>
+<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse par traitement automatique du langage naturel des questions ouvertes</h2>
+
+<h4 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Principale questions du grand débat annalysées avec l'algorithme Word2Vec + projection t-SNE</h4>
+<div class="row white">
+		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
+		<div style="padding-bottom: 50px;">
+			<form>
+				<fieldset>
+					<div>
+						<label for="male">Questions</label>
+						<select id="select_network">
+							<option value="ecolo">Que faudrait-il faire selon vous pour apporter des réponses à ce problème ?</option>
+							<option value="fisca"]>Que faudrait-il faire pour rendre la fiscalité plus juste et plus efficace ?</option>
+							<option value="cit" selected="selected">Que faudrait-il faire pour renouer le liens entre les citoyens et les élus qui les représentent ?</option>
+							<option value="etat">Que pensez-vous de l’or ganisation de l’Etat et des administrations en France ? De quelle manière cette organisation devrait-elle évoluer ?</option>
+						</select>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
 <div id="network"></div>
-<p class="footer" > Source https://granddebat.fr/</p>
+<h2 style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;"> Annalyse descriptive des questions fermées</h2>
+<div class="row white">
+		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
+		<div>
+			<form>
+				<fieldset>
+					<div>
+						<label for="male">Questions</label>
+						<select id="select_chart">
+							<option value="ecolo" selected="selected">Quel est aujourd'hui pour vous le problème concret le plus important dans le domaine de l'environnement ?</option>
+							<option value="fisca"]>Que faudrait-il faire pour rendre la fiscalité plus juste et plus efficace ?</option>
+							<option value="cit" selected="selected">Que faudrait-il faire pour renouer le liens entre les citoyens et les élus qui les représentent ?</option>
+							<option value="etat">Que pensez-vous de l’or ganisation de l’Etat et des administrations en France ? De quelle manière cette organisation devrait-elle évoluer ?</option>
+						</select>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+<div id="main_chart">
+	<div id="chart"></div>
+	<div id="map_chart"></div>
+</div>
+<p class="footer" style="padding-top: 150px;" > Source https://granddebat.fr/</p>
 <p class="footer" > Authors  <a href="https://twitter.com/LouisVlln">LouisVlln</a> - <a href="https://twitter.com/PA_veillon">PA_veillon</a> </p>
 <link rel="stylesheet" href="color_panel.css">
 <link rel="stylesheet" href="https://fonts.gstatic.com/s/montserrat/v12/JTURjIg1_i6t8kCHKm45_c5H3gnD_g.woff2">
@@ -67,6 +110,54 @@ div.tooltip {
 	height: 40px;
 }
 
+div.tooltip_c {
+	position: absolute;
+	opacity:0.8;
+	z-index:1000;
+	text-align:left;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	padding:8px;
+	color:#fff;
+	background-color:#000;
+	font: 12px sans-serif;
+	max-width: 300px;
+	height: 40px;
+}
+
+div.tooltip_n {
+	position: absolute;
+	opacity:0.8;
+	z-index:1000;
+	text-align:left;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	padding:8px;
+	color:#fff;
+	background-color:#000;
+	font: 12px sans-serif;
+	max-width: 300px;
+	height: 40px;
+}
+
+div.tooltip_mc {
+	position: absolute;
+	opacity:0.8;
+	z-index:1000;
+	text-align:left;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	padding:8px;
+	color:#fff;
+	background-color:#000;
+	font: 12px sans-serif;
+	max-width: 300px;
+	height: 40px;
+}
+
 #svg {
 	display: block;
 	margin: auto;
@@ -77,6 +168,19 @@ div.tooltip {
 	margin: auto;
 }
 
+#svgc {
+	display: block;
+	float: left;
+	margin: auto;
+}
+
+#svgm_c {
+	display: block;
+	float: left;
+	margin: auto;
+}
+
+
 .footer {
 	text-align: center;
 	font-weight: 300;
@@ -84,6 +188,23 @@ div.tooltip {
 	font-style: italic;
 }
 
+#main_chart {
+    width: 1200px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+#chart {
+	width: 600px;
+	height: 500px;
+	float: left;
+}
+
+#map_chart {
+    width: 600px;
+    height: 500px;
+    margin-left: 600px;
+}
 
 </style>
 <body>
@@ -122,7 +243,8 @@ promises.push(d3.csv("GN_conso_dep_level.csv"));
 var data_selected= "Count_pourmil";
 
 
-Promise.all(promises).then(function(values) {
+
+function plot_map(values) {
 	const geojson = values[0];
 	const csv = values[1];
 	var features = svg
@@ -178,7 +300,9 @@ Promise.all(promises).then(function(values) {
 					.style("top", "-500px");
 			});
 	});
-});
+};
+
+Promise.all(promises).then(plot_map);
 
 
 var dic_color = {};
@@ -190,70 +314,11 @@ dic_color["perc_ecolo"]="Greens";
 dic_color["perc_cit"]="Greys";
 dic_color["perc_etat"]="Purples";
 // Refresh colors on combo selection
-d3.select("select").on("change", function() {
-	d3.selectAll("svg").attr("class", dic_color[this.value]);
+d3.select("#select_map").on("change", function() {
+	d3.selectAll("#svg").attr("class", dic_color[this.value]);
 	data_selected=this.value;
-	
-svg.selectAll("*").remove();
-
-Promise.all(promises).then(function(values) {
-	const geojson = values[0];
-	const csv = values[1];
-	var features = svg
-		.selectAll("path")
-		.data(geojson.features)
-		.enter()
-		.append("path")
-		.attr('id', function(d) {return "d" + d.properties.CODE_DEPT;})
-		.attr("d", path);
-
-	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
-	var quantile = d3.scaleQuantile()
-		.domain([d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
-		.range(d3.range(9));
-
-	var legend = svg.append('g')
-		.attr('transform', 'translate(525, 150)')
-		.attr('id', 'legend');
-		
-	legend.selectAll('.colorbar')
-		.data(d3.range(9))
-	  .enter().append('svg:rect')
-		.attr('y', function(d) { return d * 20 + 'px'; })
-		.attr('height', '20px')
-		.attr('width', '20px')
-		.attr('x', '0px')
-		.attr("class", function(d) { return "q" + d + "-9"; });
-			
-	var legendScale = d3.scaleLinear()
-		.domain([ d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
-		.range([0, 9 * 20]);
-		
-	var legendAxis = svg.append("g")
-		.attr('transform', 'translate(550, 150)')
-		.call(d3.axisRight(legendScale).ticks(6));
-		
-	csv.forEach(function(e,i) {
-		d3.select("#d" + e.CODE_DEPT)
-			.attr("class", function(d) { return "department q" + quantile(+e[data_selected]) + "-9"; })
-			.on("mouseover", function(d) {
-				div.transition()        
-					.duration(200)      
-					.style("opacity", .9);
-				div.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-						+ "<b>Valeur : </b>" + Math.round(e[data_selected]*100)/100 + "<br>")
-					.style("left", (d3.event.pageX + 30) + "px")     
-					.style("top", (d3.event.pageY - 30) + "px");
-			})
-			.on("mouseout", function(d) {
-				div.style("opacity", 0);
-				div.html("")
-					.style("left", "-500px")
-					.style("top", "-500px");
-			});
-	});
-});
-
+	svg.selectAll("*").remove();
+	Promise.all(promises).then(plot_map);
 	
 });
 
@@ -268,13 +333,21 @@ var div = d3.select("body").append("div")
 const svgn = d3.select('#network').append("svg")
 	.attr("id", "svgn")
 	.attr("width", width)
-	.attr("height", height);
-	
+	.attr("height", height+50);
 
+	
+var data_selected_n = "ecolo";
 
 var promises_n = [];
-promises_n.push(d3.csv("embeddings_ecolo.csv"));
-Promise.all(promises_n).then(function(values) {
+promises_n.push(d3.csv("embeddings_"+data_selected_n+".csv"));
+
+
+function plot_n(values) {
+	var width_ = +svgn.attr("width");
+	var height_ = +svgn.attr("height");
+	const divn = d3.select("body").append("div")
+    		.attr("class", "tooltip_n")         
+    		.style("opacity", 0);
 	
 	const csv = values[0];
 	var linear_x= d3.scaleLinear()
@@ -283,6 +356,9 @@ Promise.all(promises_n).then(function(values) {
 	var linear_y= d3.scaleLinear()
 		.domain([d3.min(csv, function(e) { return +e["1"]; }), d3.max(csv, function(e) { return +e["1"]; })])
 		.range([0,height]);
+	var linear_r= d3.scaleLinear()
+		.domain([d3.min(csv, function(e) { return +e["degree"]; }), d3.max(csv, function(e) { return +e["degree"]; })])
+		.range([0.7,12]);
 	var features = svgn
 		.selectAll("circle")
 		.data(csv)
@@ -290,28 +366,254 @@ Promise.all(promises_n).then(function(values) {
 		.append("circle")
 		.attr('cx', width/2)
 		.attr("cy", height/2)
-   		.attr("r", .5)
+   		.attr("r", function(d) {return linear_r(d["degree"]);})
 		.style("opacity", .8)
 		.style("fill","#8bb1ef")
 		.on("mouseover", function(d) {
-				div.transition()        
+				divn.transition()        
 					.duration(200)      
 					.style("opacity", .9);
-				div.html(d["word"])
+				divn.html(d["word"])
 					.style("left", (d3.event.pageX + 30) + "px")     
 					.style("top", (d3.event.pageY - 30) + "px")
 					.style("height","15px");
-			});
+			})
+		.on("mouseout", function(d) {
+				div.style("opacity", 0);
+				div.html("")
+					.style("left", "-500px")
+					.style("top", "-500px");
+			});	
+	
+		
 	
 	features.transition()
-			.duration(8000)
+			.duration(6000)
 			.attr('cx', function(d) {return linear_x(d["0"]);})
-			.attr("cy", function(d) {return linear_y(d["1"]);})
-			.each('start',function(){ d3.select(this).style("opacity", "0.2"); })
-			.each('end',  function(){ d3.select(this).style("opacity", "0.8"); });
+			.attr("cy", function(d) {return linear_y(d["1"]);});
+			
+			
+};
+
+Promise.all(promises_n).then(plot_n);
+
+d3.select("#select_network").on("change", function() {
+	
+	svgn.selectAll("*").remove();
+	d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
+	promises_n.pop(d3.csv("embeddings_"+data_selected_n+".csv"));
+	data_selected_n = this.value;
+	promises_n.push(d3.csv("embeddings_"+data_selected_n+".csv"));
+	Promise.all(promises_n).then(plot_n);
+
+
+});	
+	
+
 		
+
+
+
+//--------------------------------------------------------------------------------
+
+const margin_c = {top: 120, right: 20, bottom: 250, left: 120},
+    width_c = 600 - margin_c.left - margin_c.right,
+    height_c = 600 - margin_c.top - margin_c.bottom;
+
+const x = d3.scaleBand()
+    .range([0, width_c])
+    .padding(0.1);
+
+const y = d3.scaleLinear()
+    .range([height_c, 0]);
+
+const svgc = d3.select("#chart").append("svg")
+    .attr("id", "svgc")
+    .attr("width", width_c + margin_c.left + margin_c.right)
+    .attr("height", height_c + margin_c.top + margin_c.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin_c.left + "," + margin_c.top + ")");
+
+// Create the DIV that will contain our map
+var data_selected_c = "La pollution de l'air";
+
+var title = d3.select("#map_chart").append("h5");
+	title.html(data_selected_c+" en %")
+	     .style("text-align","center");
+
+const svgm_c = d3.select('#map_chart').append("svg")
+	.attr("id", "svgm_c")
+	.attr("width", 600)
+	.attr("height", 500)
+	.attr("class", "Blues");
+
+// Append the group that will contain our paths
+const deps_c = svgm_c.append("g");
+
+
+
+
+promises.push(d3.csv("rf_total_ecologie_1.csv"));
+promises.push(d3.csv("rf_ecologie_1.csv"));
+Promise.all(promises).then(function(values) {
+
+	const geojson = values[0];
+	const csv = values[2];
+	const csv_dep = values[3];
+
+	var features = svgm_c
+		.selectAll("path")
+		.data(geojson.features)
+		.enter()
+		.append("path")
+		.attr('id', function(d) {return "d_" + d.properties.CODE_DEPT;})
+		.attr("d", path);
+
+	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
+	var quantile = d3.scaleQuantile()
+		.domain([ d3.min(csv_dep, function(e) { return +e[data_selected_c]; }), d3.max(csv_dep, function(e) { return +e[data_selected_c]; })])
+		.range(d3.range(9));
+
+	var legend = svgm_c.append('g')
+		.attr('transform', 'translate(525, 150)')
+		.attr('id', 'legend');
+		
+	legend.selectAll('.colorbar')
+		.data(d3.range(9))
+	  .enter().append('svg:rect')
+		.attr('y', function(d) { return d * 20 + 'px'; })
+		.attr('height', '20px')
+		.attr('width', '20px')
+		.attr('x', '0px')
+		.attr("class", function(d) { return "q" + d + "-9"; });
+			
+	var legendScale = d3.scaleLinear()
+		.domain([d3.min(csv_dep, function(e) { return +e[data_selected_c]; }), d3.max(csv_dep, function(e) { return +e[data_selected_c]; })])
+		.range([0, 9 * 20]);
+		
+	var legendAxis = svgm_c.append("g")
+		.attr('transform', 'translate(550, 150)')
+		.call(d3.axisRight(legendScale).ticks(6));
+
+	
+		
+	csv_dep.forEach(function(e,i) {
+		d3.select("#d_" + e.CODE_DEPT)
+			.attr("class", function(d) { return "department q" + quantile(+e[data_selected_c]) + "-9"; })
+			.on("mouseover", function(d) {
+				div.transition()        
+					.duration(200)      
+					.style("opacity", .9);
+				div.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
+						+ "<b>Valeur : </b>" + Math.round(e[data_selected_c]*100)/100 + "<br>")
+					.style("left", (d3.event.pageX + 30) + "px")     
+					.style("top", (d3.event.pageY - 30) + "px");
+			})
+			.on("mouseout", function(d) {
+				div.style("opacity", 0);
+				div.html("")
+					.style("left", "-500px")
+					.style("top", "-500px");
+			});
+	});
+	   
+	    const divc = d3.select("body").append("div")
+    		.attr("class", "tooltip_c")         
+    		.style("opacity", 0);
+
+            const divmc = d3.select("body").append("div")
+    		.attr("class", "tooltip_mc")         
+    		.style("opacity", 0);
+
+	
+	    // Conversion des caractères en nombres
+	    csv.forEach(function(d) {
+		d.count = +d.count;
+	    });
+
+	    // Mise en relation du scale avec les données de notre fichier
+	    // Pour l'axe X, c'est la liste des pays
+	    // Pour l'axe Y, c'est le max des populations
+	    x.domain(csv.map(function(d) { return d.rep; }));
+	    y.domain([0, d3.max(csv, function(d) { return d.count; })]);
+	    
+	    // Ajout de l'axe X au SVG
+	    // Déplacement de l'axe horizontal et du futur texte (via la fonction translate) au bas du SVG
+	    // Selection des noeuds text, positionnement puis rotation
+	    svgc.append("g")
+		.attr("transform", "translate(0," + height_c + ")")
+		.call(d3.axisBottom(x).tickSize(0))
+		.selectAll("text")	
+		    .style("text-anchor", "end")
+		    .attr("dx", "-.8em")
+		    .attr("dy", ".15em")
+		    .attr("transform", "rotate(-65)");
+	    
+	    // Ajout de l'axe Y au SVG avec 6 éléments de légende en utilisant la fonction ticks (sinon D3JS en place autant qu'il peut).
+	    svgc.append("g")
+		.call(d3.axisLeft(y).ticks(6));
+
+	    // Ajout des bars en utilisant les données de notre fichier data.tsv
+	    // La largeur de la barre est déterminée par la fonction x
+	    // La hauteur par la fonction y en tenant compte de la population
+	    // La gestion des events de la souris pour le popup
+	    svgc.selectAll(".bar")
+		.data(csv)
+	    .enter().append("rect")
+		.attr("class", "bar")
+		.attr("x", function(d) { return x(d.rep); })
+		.attr("width", x.bandwidth())
+		.attr("y", function(d) { return y(d.count/10); })
+		.attr("height", function(d) { return height_c - y(d.count/10); })		
+		.style("fill","#8bb1ef")
+		.style("opacity",.8)
+		.on("mouseover", function(d) {
+		    divc.transition()        
+		        .duration(200)      
+		        .style("opacity", .9);
+		    divc.html("Nbr de réponse : " + d.count)
+		        .style("left", (d3.event.pageX + 10) + "px")     
+		        .style("top", (d3.event.pageY - 50) + "px")
+			.style("height","15px");
+		    quantile.domain([ d3.min(csv_dep, function(e) { return +e[d.rep]; }), d3.max(csv_dep, function(e) { return +e[d.rep]; })]);
+		    csv_dep.forEach(function(e,i) {
+			d3.select("#d_" + e.CODE_DEPT)
+				.attr("class", "department q" + quantile(+e[d.rep]) + "-9")
+				.on("mouseover", function(l) {
+					divmc.transition()        
+						.duration(200)      
+						.style("opacity", .9);
+					divmc.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
+						+ "<b>Valeur : </b>" + Math.round(e[d.rep]*100)/100 + "<br>")
+					.style("left", (d3.event.pageX + 30) + "px")     
+					.style("top", (d3.event.pageY - 30) + "px");});
+					
+			});
+		    legendScale.domain([d3.min(csv_dep, function(e) { return +e[d.rep]; }), d3.max(csv_dep, function(e) { return +e[d.rep]; })]);
+		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
+		    title.html(d.rep+" en %");
+
+			
+		})
+		.on("mouseout", function(d) {
+		    divc.transition()
+		        .duration(500)
+		        .style("opacity", 0);
+		})
+		.transition()
+    			.duration(2000)
+    			.attr("y", function(d) { return y(d.count); })
+    			.attr("height", function(d) { return height_c - y(d.count); });
+	
+	
+	
 });
-		
+
+// Append a DIV for the tooltip
+var div = d3.select("body").append("div")   
+	.attr("class", "tooltip_n")               
+	.style("opacity", 0);
+			
 </script>
 </body>
 
