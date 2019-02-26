@@ -48,6 +48,7 @@
 	</div>
 <div id="network"></div>
 <h2 style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;"> Annalyse descriptive des questions fermées</h2>
+<h3 id="h_ecolo" style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;">La transition écologique</h3>
 <div class="row white">
 		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
 		<div>
@@ -55,20 +56,33 @@
 				<fieldset>
 					<div>
 						<label for="male">Questions</label>
-						<select id="select_chart">
-							<option value="ecolo" selected="selected">Quel est aujourd'hui pour vous le problème concret le plus important dans le domaine de l'environnement ?</option>
-							<option value="fisca"]>Que faudrait-il faire pour rendre la fiscalité plus juste et plus efficace ?</option>
-							<option value="cit" selected="selected">Que faudrait-il faire pour renouer le liens entre les citoyens et les élus qui les représentent ?</option>
-							<option value="etat">Que pensez-vous de l’or ganisation de l’Etat et des administrations en France ? De quelle manière cette organisation devrait-elle évoluer ?</option>
-						</select>
+						<select id="select_chart_ecolo"></select>
 					</div>
 				</fieldset>
 			</form>
 		</div>
 	</div>
-<div id="main_chart">
-	<div id="chart"></div>
-	<div id="map_chart"></div>
+<div id="main_chart_ecolo" class="main">
+	<div id="chart_ecolo" class="chart"></div>
+	<div id="map_chart_ecolo" class="map"></div>
+</div>
+<h3 id="h_fisc" style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;">La fisaclité et les dépenses publics</h3>
+<div class="row white">
+		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
+		<div>
+			<form>
+				<fieldset>
+					<div>
+						<label for="male">Questions</label>
+						<select id="select_chart_fisc"></select>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+<div id="main_chart_fisc" class="main">
+	<div id="chart_fisc" class="chart"></div>
+	<div id="map_chart_fisc" class="map"></div>
 </div>
 <p class="footer" style="padding-top: 150px;" > Source https://granddebat.fr/</p>
 <p class="footer" > Authors  <a href="https://twitter.com/LouisVlln">LouisVlln</a> - <a href="https://twitter.com/PA_veillon">PA_veillon</a> </p>
@@ -168,13 +182,13 @@ div.tooltip_mc {
 	margin: auto;
 }
 
-#svgc {
+.svgc {
 	display: block;
 	float: left;
 	margin: auto;
 }
 
-#svgm_c {
+.svgm {
 	display: block;
 	float: left;
 	margin: auto;
@@ -188,19 +202,19 @@ div.tooltip_mc {
 	font-style: italic;
 }
 
-#main_chart {
+.main {
     width: 1200px;
     height: 500px;
     margin: 0 auto;
 }
 
-#chart {
+.chart {
 	width: 600px;
 	height: 500px;
 	float: left;
 }
 
-#map_chart {
+.map{
     width: 600px;
     height: 500px;
     margin-left: 600px;
@@ -427,51 +441,69 @@ const x = d3.scaleBand()
 const y = d3.scaleLinear()
     .range([height_c, 0]);
 
-const svgc = d3.select("#chart").append("svg")
-    .attr("id", "svgc")
-    .attr("width", width_c + margin_c.left + margin_c.right)
-    .attr("height", height_c + margin_c.top + margin_c.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin_c.left + "," + margin_c.top + ")");
-
-// Create the DIV that will contain our map
-var data_selected_c = "La pollution de l'air";
-
-var title = d3.select("#map_chart").append("h5");
-	title.html(data_selected_c+" en %")
-	     .style("text-align","center");
-
-const svgm_c = d3.select('#map_chart').append("svg")
-	.attr("id", "svgm_c")
-	.attr("width", 600)
-	.attr("height", 500)
-	.attr("class", "Blues");
-
-// Append the group that will contain our paths
-const deps_c = svgm_c.append("g");
 
 
+promises.push(d3.csv("rf_total_ecolo.csv"));
+promises.push(d3.csv("rf_ecologie.csv"));
 
 
-promises.push(d3.csv("rf_total_ecologie_1.csv"));
-promises.push(d3.csv("rf_ecologie_1.csv"));
-Promise.all(promises).then(function(values) {
+function plot_map_chart(values) {
 
 	const geojson = values[0];
 	const csv = values[2];
 	const csv_dep = values[3];
+        const theme = values[4];
+	
+	
+	
+	const svgc = d3.select("#chart_"+theme).append("svg")
+    		.attr("id", "svgc_"+theme)
+                .attr("class","svgc")
+    		.attr("width", width_c + margin_c.left + margin_c.right)
+    		.attr("height", height_c + margin_c.top + margin_c.bottom)
+    		.append("g")
+    		.attr("transform", "translate(" + margin_c.left + "," + margin_c.top + ")");
+
+	var title = d3.select("#map_chart_"+theme).append("h5")
+				.attr("id","title_"+theme);
+	
+
+	    csv_theme = csv.filter(function(d) {return d.theme ==d3.select("#h_"+theme).text();});
+	    var quest_id= d3.nest()
+		.key(function(d) { return d.id; })
+		//.value(function(d) { return d.question; })
+		.entries(csv_theme);
+	    console.log('#select_chart'+'_'+theme);
+	    d3.select('#select_chart'+'_'+theme).selectAll('option')
+		 	.data(quest_id)
+			.enter()
+			.append('option')
+			.text(function(d) {return d.values[0].question;})
+			.attr('value',function(d){return d.key;});
+	var data_id_selected = d3.select('#select_chart_'+theme).node().value;
+	var data_selected_c = csv_theme.filter(function(d) {return d.id ==data_id_selected;});
+	data_selected_c = data_selected_c[0]['CODE_DEPT'];
+
+	title.html(data_selected_c+" en %")
+	     .style("text-align","center");
+
+	const svgm_c = d3.select('#map_chart_'+theme).append("svg")
+		.attr("id", "svgm_"+theme)
+		.attr("width", 600)
+		.attr("height", 500)
+		.attr("class", "Blues svgm");
 
 	var features = svgm_c
 		.selectAll("path")
 		.data(geojson.features)
 		.enter()
 		.append("path")
-		.attr('id', function(d) {return "d_" + d.properties.CODE_DEPT;})
+		.attr('id', function(d) {return "d_"+theme+"_" + d.properties.CODE_DEPT;})
 		.attr("d", path);
 
 	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
 	var quantile = d3.scaleQuantile()
-		.domain([ d3.min(csv_dep, function(e) { return +e[data_selected_c]; }), d3.max(csv_dep, function(e) { return +e[data_selected_c]; })])
+		.domain([ d3.min(csv_dep, function(e) { return +e[data_selected_c+"_"+data_id_selected]; }), d3.max(csv_dep, function(e) { return +e[data_selected_c+"_"+data_id_selected]; })])
 		.range(d3.range(9));
 
 	var legend = svgm_c.append('g')
@@ -488,24 +520,25 @@ Promise.all(promises).then(function(values) {
 		.attr("class", function(d) { return "q" + d + "-9"; });
 			
 	var legendScale = d3.scaleLinear()
-		.domain([d3.min(csv_dep, function(e) { return +e[data_selected_c]; }), d3.max(csv_dep, function(e) { return +e[data_selected_c]; })])
+		.domain([d3.min(csv_dep, function(e) { return +e[data_selected_c+"_"+data_id_selected]; }), d3.max(csv_dep, function(e) { return +e[data_selected_c+"_"+data_id_selected]; })])
 		.range([0, 9 * 20]);
 		
 	var legendAxis = svgm_c.append("g")
+                .attr("id","legendt")
 		.attr('transform', 'translate(550, 150)')
 		.call(d3.axisRight(legendScale).ticks(6));
 
 	
 		
 	csv_dep.forEach(function(e,i) {
-		d3.select("#d_" + e.CODE_DEPT)
-			.attr("class", function(d) { return "department q" + quantile(+e[data_selected_c]) + "-9"; })
+		d3.select("#d_"+theme+"_" + e.CODE_DEPT)
+			.attr("class", function(d) { return "department q" + quantile(+e[data_selected_c+"_"+data_id_selected]) + "-9"; })
 			.on("mouseover", function(d) {
 				div.transition()        
 					.duration(200)      
 					.style("opacity", .9);
 				div.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-						+ "<b>Valeur : </b>" + Math.round(e[data_selected_c]*100)/100 + "<br>")
+						+ "<b>Valeur : </b>" + Math.round(e[data_selected_c+"_"+data_id_selected]*100)/100 + "<br>")
 					.style("left", (d3.event.pageX + 30) + "px")     
 					.style("top", (d3.event.pageY - 30) + "px");
 			})
@@ -524,18 +557,26 @@ Promise.all(promises).then(function(values) {
             const divmc = d3.select("body").append("div")
     		.attr("class", "tooltip_mc")         
     		.style("opacity", 0);
-
+	    
+            
+	    
+	    
+		
 	
 	    // Conversion des caractères en nombres
 	    csv.forEach(function(d) {
-		d.count = +d.count;
+		d.total = parseInt(d.total);
+               
 	    });
 
+            
+	    var csv_selected = csv.filter(function (d) { return d.id == +data_id_selected});
 	    // Mise en relation du scale avec les données de notre fichier
 	    // Pour l'axe X, c'est la liste des pays
 	    // Pour l'axe Y, c'est le max des populations
-	    x.domain(csv.map(function(d) { return d.rep; }));
-	    y.domain([0, d3.max(csv, function(d) { return d.count; })]);
+	    x.domain(csv_selected.map(function(d) { return d.CODE_DEPT; }));
+	    y.domain([0, d3.max(csv_selected, function(d) { return d.total; })]);
+
 	    
 	    // Ajout de l'axe X au SVG
 	    // Déplacement de l'axe horizontal et du futur texte (via la fonction translate) au bas du SVG
@@ -558,40 +599,41 @@ Promise.all(promises).then(function(values) {
 	    // La hauteur par la fonction y en tenant compte de la population
 	    // La gestion des events de la souris pour le popup
 	    svgc.selectAll(".bar")
-		.data(csv)
+		.data(csv_selected)
 	    .enter().append("rect")
 		.attr("class", "bar")
-		.attr("x", function(d) { return x(d.rep); })
+		.attr("x", function(d) { return x(d.CODE_DEPT); })
 		.attr("width", x.bandwidth())
-		.attr("y", function(d) { return y(d.count/10); })
-		.attr("height", function(d) { return height_c - y(d.count/10); })		
+		.attr("y", function(d) { return y(d.total/10); })
+		.attr("height", function(d) { return height_c - y(d.total/10); })		
 		.style("fill","#8bb1ef")
 		.style("opacity",.8)
 		.on("mouseover", function(d) {
 		    divc.transition()        
 		        .duration(200)      
 		        .style("opacity", .9);
-		    divc.html("Nbr de réponse : " + d.count)
+		    divc.html("Nbr de réponse : " + d.total)
 		        .style("left", (d3.event.pageX + 10) + "px")     
 		        .style("top", (d3.event.pageY - 50) + "px")
 			.style("height","15px");
-		    quantile.domain([ d3.min(csv_dep, function(e) { return +e[d.rep]; }), d3.max(csv_dep, function(e) { return +e[d.rep]; })]);
+		    quantile.domain([ d3.min(csv_dep, function(e) { return +e[d.CODE_DEPT+"_"+data_id_selected]; }), d3.max(csv_dep, function(e) { return +e[d.CODE_DEPT+"_"+data_id_selected]; })]);
 		    csv_dep.forEach(function(e,i) {
-			d3.select("#d_" + e.CODE_DEPT)
-				.attr("class", "department q" + quantile(+e[d.rep]) + "-9")
+			d3.select("#d_"+theme+"_" + e.CODE_DEPT)
+				.attr("class", "department q" + quantile(+e[d.CODE_DEPT+"_"+data_id_selected]) + "-9")
 				.on("mouseover", function(l) {
 					divmc.transition()        
 						.duration(200)      
 						.style("opacity", .9);
 					divmc.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-						+ "<b>Valeur : </b>" + Math.round(e[d.rep]*100)/100 + "<br>")
+						+ "<b>Valeur : </b>" + Math.round(e[d.CODE_DEPT+"_"+data_id_selected]*100)/100 + "<br>")
 					.style("left", (d3.event.pageX + 30) + "px")     
 					.style("top", (d3.event.pageY - 30) + "px");});
 					
 			});
-		    legendScale.domain([d3.min(csv_dep, function(e) { return +e[d.rep]; }), d3.max(csv_dep, function(e) { return +e[d.rep]; })]);
+		    
+		    legendScale.domain([d3.min(csv_dep, function(e) { return +e[d.CODE_DEPT+"_"+data_id_selected]; }), d3.max(csv_dep, function(e) { return +e[d.CODE_DEPT+"_"+data_id_selected]; })]);
 		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
-		    title.html(d.rep+" en %");
+		    title.html(d.CODE_DEPT+" en %");
 
 			
 		})
@@ -602,17 +644,58 @@ Promise.all(promises).then(function(values) {
 		})
 		.transition()
     			.duration(2000)
-    			.attr("y", function(d) { return y(d.count); })
-    			.attr("height", function(d) { return height_c - y(d.count); });
+    			.attr("y", function(d) { return y(d.total); })
+    			.attr("height", function(d) { return height_c - y(d.total); });
 	
 	
 	
-});
+};
 
+
+
+promises.push('ecolo');
+Promise.all(promises).then(plot_map_chart);
+promises.pop('ecolo');
 // Append a DIV for the tooltip
 var div = d3.select("body").append("div")   
 	.attr("class", "tooltip_n")               
 	.style("opacity", 0);
+
+d3.select("#select_chart_ecolo").on("change", function() {
+	promises.push('ecolo');
+	d3.select("#svgc_ecolo").remove();
+	d3.select("#svgm_ecolo").remove();
+	d3.select("#title_ecolo").remove();
+	//d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
+	data_id_selected = this.value.toString();
+	Promise.all(promises).then(plot_map_chart);
+	promises.pop('ecolo');
+
+
+});
+
+
+
+promises.push('fisc');
+Promise.all(promises).then(plot_map_chart);
+promises.pop('fisc');
+// Append a DIV for the tooltip
+var div = d3.select("body").append("div")   
+	.attr("class", "tooltip_n")               
+	.style("opacity", 0);
+
+d3.select("#select_chart_fisc").on("change", function() {
+	promises.push('fisc');
+	d3.select("#svgc_fisc").remove();
+	d3.select("#svgm_fisc").remove();
+	d3.select("title_fisc").remove();
+	//d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
+	data_id_selected = this.value.toString();
+	Promise.all(promises).then(plot_map_chart);
+	promises.pop('fisc');
+
+
+});	
 			
 </script>
 </body>
