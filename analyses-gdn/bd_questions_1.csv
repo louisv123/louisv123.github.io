@@ -1,0 +1,53 @@
+Id1,Id2,CODE_DEPT,total,question,id,theme
+Ecolo_0,Ecolo_0c,L'érosion du littoral,367,Quel est aujourd'hui pour vous le problème concret le plus important dans le domaine de l'environnement ?,160,La transition écologique
+Ecolo_0,Ecolo_0d,La biodiversité et la disparition de certaines espèces,11211,Quel est aujourd'hui pour vous le problème concret le plus important dans le domaine de l'environnement ?,160,La transition écologique
+Ecolo_0,Ecolo_0a,La pollution de l'air,11615,Quel est aujourd'hui pour vous le problème concret le plus important dans le domaine de l'environnement ?,160,La transition écologique
+Ecolo_0,Ecolo_0b,"Les dérèglements climatiques (crue, sécheresse)",16986,Quel est aujourd'hui pour vous le problème concret le plus important dans le domaine de l'environnement ?,160,La transition écologique
+Ecolo_2,Ecolo_2b,Non,20399,Diriez-vous que votre vie quotidienne est aujourd'hui touchée par le changement climatique ?,146,La transition écologique
+Ecolo_2,Ecolo_2a,Oui,38473,Diriez-vous que votre vie quotidienne est aujourd'hui touchée par le changement climatique ?,146,La transition écologique
+Ecolo_4,Ecolo_4b,Non,3523,"À titre personnel, pensez-vous pouvoir contribuer à protéger l'environnement ?",148,La transition écologique
+Ecolo_4,Ecolo_4a,Oui,55310,"À titre personnel, pensez-vous pouvoir contribuer à protéger l'environnement ?",148,La transition écologique
+Ecolo_8,Ecolo_8b,Non,22569,"Par rapport à votre mode de chauffage actuel, pensez-vous qu'il existe des solutions alternatives plus écologiques ?",152,La transition écologique
+Ecolo_8,Ecolo_8a,Oui,33489,"Par rapport à votre mode de chauffage actuel, pensez-vous qu'il existe des solutions alternatives plus écologiques ?",152,La transition écologique
+Ecolo_10,Ecolo_10c,Je n'utilise pas la voiture,12392,"Avez-vous pour vos déplacements quotidiens la possibilité de recourir à des solutions de mobilité alternatives à la voiture individuelle comme les transports en commun, le covoiturage, l'auto-partage, le transport à la demande, le vélo, etc. ?",154,La transition écologique
+Ecolo_10,Ecolo_10b,Non,21899,"Avez-vous pour vos déplacements quotidiens la possibilité de recourir à des solutions de mobilité alternatives à la voiture individuelle comme les transports en commun, le covoiturage, l'auto-partage, le transport à la demande, le vélo, etc. ?",154,La transition écologique
+Ecolo_10,Ecolo_10a,Oui,23637,"Avez-vous pour vos déplacements quotidiens la possibilité de recourir à des solutions de mobilité alternatives à la voiture individuelle comme les transports en commun, le covoiturage, l'auto-partage, le transport à la demande, le vélo, etc. ?",154,La transition écologique
+Ecolo_12,Ecolo_12c,L'auto partage,6213,"Si non, quelles sont les solutions de mobilité alternatives que vous souhaiteriez pouvoir utiliser ?",207,La transition écologique
+Ecolo_12,Ecolo_12b,Le covoiturage,9520,"Si non, quelles sont les solutions de mobilité alternatives que vous souhaiteriez pouvoir utiliser ?",207,La transition écologique
+Ecolo_12,Ecolo_12d,Le transport à la demande,10229,"Si non, quelles sont les solutions de mobilité alternatives que vous souhaiteriez pouvoir utiliser ?",207,La transition écologique
+Ecolo_12,Ecolo_12e,Le vélo,15392,"Si non, quelles sont les solutions de mobilité alternatives que vous souhaiteriez pouvoir utiliser ?",207,La transition écologique
+Ecolo_12,Ecolo_12a,Les transports en commun,26505,"Si non, quelles sont les solutions de mobilité alternatives que vous souhaiteriez pouvoir utiliser ?",207,La transition écologique
+Fisca_1,Fisca_1b,Augmenter le temps de travail,21373,"Afin de financer les dépenses sociales, faut-il selon vous...",206,La fisaclité et les dépenses publics
+Fisca_1,Fisca_1c,Augmenter les impôts,3089,"Afin de financer les dépenses sociales, faut-il selon vous...",206,La fisaclité et les dépenses publics
+Fisca_1,Fisca_1a,Reculer l'âge de la retraite,17825,"Afin de financer les dépenses sociales, faut-il selon vous...",206,La fisaclité et les dépenses publics
+Fisca_1,Fisca_1d,Revoir les conditions d'attribution de certaines aides sociales,44610,"Afin de financer les dépenses sociales, faut-il selon vous...",206,La fisaclité et les dépenses publics
+Cit_1,Cit_1b,Non,16997,"En dehors des élus politiques, faut-il donner un rôle plus important aux associations et aux organisations syndicales et professionnelles ?",,Démocratie et Citoyenneté
+Cit_1,Cit_1a,Oui,24167,"En dehors des élus politiques, faut-il donner un rôle plus important aux associations et aux organisations syndicales et professionnelles ?",,Démocratie et Citoyenneté
+Cit_4,Cit_4a,Une bonne chose,31766,Le non-cumul des mandats instauré en 2017 pour les parlementaires (députés et sénateurs) est :,,Démocratie et Citoyenneté
+Cit_4,Cit_4b,Une mauvaise chose,6089,Le non-cumul des mandats instauré en 2017 pour les parlementaires (députés et sénateurs) est :,,Démocratie et Citoyenneté
+Cit_4,Cit_4c,Je ne sais pas,4456,Le non-cumul des mandats instauré en 2017 pour les parlementaires (députés et sénateurs) est :,,Démocratie et Citoyenneté
+Cit_7,Cit_7a,Oui,29770,Pensez-vous qu'il serait souhaitable de réduire le nombre d'élus (hors députés et sénateurs) ?,,Démocratie et Citoyenneté
+Cit_7,Cit_7b,Non,10809,Pensez-vous qu'il serait souhaitable de réduire le nombre d'élus (hors députés et sénateurs) ?,,Démocratie et Citoyenneté
+Cit_10,Cit_10a,Oui,34456,Faut-il prendre en compte le vote blanc ?,,Démocratie et Citoyenneté
+Cit_10,Cit_10b,Non,7528,Faut-il prendre en compte le vote blanc ?,,Démocratie et Citoyenneté
+Cit_13,Cit_13a,Oui,21590,Faut-il faciliter le déclenchement du référendum d'initiative partagée qui est applicable depuis 2015 ?,,Démocratie et Citoyenneté
+Cit_13,Cit_13b,Non,11046,Faut-il faciliter le déclenchement du référendum d'initiative partagée qui est applicable depuis 2015 ?,,Démocratie et Citoyenneté
+Cit_13,Cit_13c,Je ne sais pas,8504,Faut-il faciliter le déclenchement du référendum d'initiative partagée qui est applicable depuis 2015 ?,,Démocratie et Citoyenneté
+Cit_17,Cit_17a,Oui,28133,Faut-il transformer le Sénat et le CESE?,,Démocratie et Citoyenneté
+Cit_17,Cit_17b,Non,4181,Faut-il transformer le Sénat et le CESE?,,Démocratie et Citoyenneté
+Etat_1,Etat_1a,Oui,18079,"Selon vous, l'Etat doit-il aujourd'hui transférer de nouvelles missions aux collectivités territoriales ?",,Organisation de l’Etat et des services publics
+Etat_1,Etat_1b,Non,17154,"Selon vous, l'Etat doit-il aujourd'hui transférer de nouvelles missions aux collectivités territoriales ?",,Organisation de l’Etat et des services publics
+Etat_3,Etat_3a,Oui,25835,Estimez-vous avoir accès aux services publics dont vous avez besoin ?,,Organisation de l’Etat et des services publics
+Etat_3,Etat_3b,Non,12037,Estimez-vous avoir accès aux services publics dont vous avez besoin ?,,Organisation de l’Etat et des services publics
+Etat_6,Etat_6a,Oui,10155,Avez-vous déjà utilisé certaines de ces nouvelles formes de services publics ?,,Organisation de l’Etat et des services publics
+Etat_6,Etat_6b,Non,26165,Avez-vous déjà utilisé certaines de ces nouvelles formes de services publics ?,,Organisation de l’Etat et des services publics
+Etat_7,Etat_7a,Oui,7604,"Si oui, en avez-vous été satisfait ? (nouvelles formes de services publics)",,Organisation de l’Etat et des services publics
+Etat_7,Etat_7b,Non,3546,"Si oui, en avez-vous été satisfait ? (nouvelles formes de services publics)",,Organisation de l’Etat et des services publics
+Etat_11,Etat_11a,Oui,29188,Connaissez-vous le 'droit à l'erreur'?,,Organisation de l’Etat et des services publics
+Etat_11,Etat_11b,Non,7490,Connaissez-vous le 'droit à l'erreur'?,,Organisation de l’Etat et des services publics
+Etat_12,Etat_12a,Oui,2730,"Si oui, avez-vous déjà utilisé ce droit à l'erreur ?",,Organisation de l’Etat et des services publics
+Etat_12,Etat_12b,Non,29469,"Si oui, avez-vous déjà utilisé ce droit à l'erreur ?",,Organisation de l’Etat et des services publics
+Etat_15,Etat_15a,Oui,22235,Faut-il donner plus d'autonomie aux fonctionnaires de terrain ?,,Organisation de l’Etat et des services publics
+Etat_15,Etat_15b,Non,9017,Faut-il donner plus d'autonomie aux fonctionnaires de terrain ?,,Organisation de l’Etat et des services publics
+Etat_17,Etat_17a,Oui,28236,Faut-il revoir le fonctionnement et la formation de l'administration ?,,Organisation de l’Etat et des services publics
+Etat_17,Etat_17b,Non,3120,Faut-il revoir le fonctionnement et la formation de l'administration ?,,Organisation de l’Etat et des services publics
