@@ -193,8 +193,11 @@
 	
 </div>
 
-<p class="footer" style="padding-top: 150px;" > Source https://granddebat.fr/</p>
-<p class="footer" > Authors  <a href="https://twitter.com/LouisVlln">LouisVlln</a> - <a href="https://twitter.com/PA_veillon">PA_veillon</a> </p>
+<p class="footer" style="padding-top: 150px;" > Sources : Données ouvertes du GDN, Base de données infra communales (INSEE), Base Filosofi (INSEE), Calcul des auteurs <br>
+*Les communes sont regroupés par code postal.</p>
+<p class="footer" > Authors : <a href="https://twitter.com/LouisVlln">LouisVlln</a> - <a href="https://twitter.com/PA_veillon">PA_veillon</a> </p>
+<p class="footer" > Contact : louis.veillon@gadz.org - paul-armand.veillon@polytechnique.org </p>
+
 <link rel="stylesheet" href="color_panel.css">
 <link rel="stylesheet" href="https://fonts.gstatic.com/s/montserrat/v12/JTURjIg1_i6t8kCHKm45_c5H3gnD_g.woff2">
 <style>
@@ -331,9 +334,9 @@ div.tooltip_mc {
 
 .main {
     width: 1200px;
-    height: 500px;
+    height: 600px;
     margin: 0 auto;
-    padding-bottom: 100px;
+   
 }
 
 
@@ -624,7 +627,6 @@ function plot_map_chart(values) {
 
 	var data_id_selected = d3.select('#select_chart_'+theme).node().value;
 	var data_selected_c = csv_theme.filter(function(d) {return d.Id1 ==data_id_selected;});
-	var data_selected_id2 =  data_id_selected+"a";
 	data_selected_c = data_selected_c[0]['CODE_DEPT'];
 
 	title.html(data_selected_c+" en %")
@@ -644,9 +646,20 @@ function plot_map_chart(values) {
 		.attr('id', function(d) {return "d_"+theme+"_" + d.properties.CODE_DEPT;})
 		.attr("d", path);
 
+	var csv_selected = csv.filter(function (d) { return d.Id1 == data_id_selected});
+
+
+	var quantile_select = "% Ouvriers";
+	d3.select('#select_resp'+'_'+theme).selectAll('option').remove();
+	d3.select('#select_resp'+'_'+theme).selectAll('option')
+	 	.data(csv_selected)
+		.enter()
+		.append('option')
+		.text(function(d) {return d.CODE_DEPT;})
+		.attr('value',function(d){return d.Id2;});
 	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
 	var quantile = d3.scaleQuantile()
-		.domain([ d3.min(csv_dep, function(e) { return +e[data_selected_id2]; }), d3.max(csv_dep, function(e) { return +e[data_selected_id2]; })])
+		.domain([ d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })])
 		.range(d3.range(9));
 
 	var legend = svgm_c.append('g')
@@ -663,7 +676,7 @@ function plot_map_chart(values) {
 		.attr("class", function(d) { return "q" + d + "-9"; });
 			
 	var legendScale = d3.scaleLinear()
-		.domain([d3.min(csv_dep, function(e) { return +e[data_selected_id2]; }), d3.max(csv_dep, function(e) { return +e[data_selected_id2]; })])
+		.domain([d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })])
 		.range([0, 9 * 20]);
 		
 	var legendAxis = svgm_c.append("g")
@@ -672,16 +685,17 @@ function plot_map_chart(values) {
 		.call(d3.axisRight(legendScale).ticks(6));
 
 	
+	
 		
 	csv_dep.forEach(function(e,i) {
 		d3.select("#d_"+theme+"_" + e.CODE_DEPT)
-			.attr("class", function(d) { return "department q" + quantile(+e[data_selected_id2]) + "-9"; })
+			.attr("class", function(d) { return "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]) + "-9"; })
 			.on("mouseover", function(d) {
 				div.transition()        
 					.duration(200)      
 					.style("opacity", .9);
 				div.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-						+ "<b>Valeur : </b>" + Math.round(e[data_selected_id2]*100)/100 + "<br>")
+						+ "<b>Valeur : </b>" + Math.round(e[d3.select("#select_resp_"+theme).node().value]*100)/100 + "<br>")
 					.style("left", (d3.event.pageX + 30) + "px")     
 					.style("top", (d3.event.pageY - 30) + "px");
 			})
@@ -713,7 +727,7 @@ function plot_map_chart(values) {
 	    });
 
             
-	    var csv_selected = csv.filter(function (d) { return d.Id1 == data_id_selected});
+	    
 	    // Mise en relation du scale avec les données de notre fichier
 	    // Pour l'axe X, c'est la liste des pays
 	    // Pour l'axe Y, c'est le max des populations
@@ -728,10 +742,36 @@ function plot_map_chart(values) {
 		.attr("transform", "translate(0," + height_c + ")")
 		.call(d3.axisBottom(x).tickSize(0))
 		.selectAll("text")	
-		    .style("text-anchor", "end")
 		    .attr("dx", "-.8em")
-		    .attr("dy", ".15em")
-		    .attr("transform", "rotate(-65)");
+		    .attr("y","8")
+		    //.attr("dy", "-.15em")
+		    .call(wrap, 100);
+		
+	    function wrap(text, width) {
+		    text.each(function() {
+			var text = d3.select(this),
+			words = text.text().split(/\s+/).reverse(),
+			word,
+			line = [],
+			lineNumber = 0,
+			y = text.attr("y"),
+			dy = parseFloat(text.attr("dy")),
+			lineHeight = 1.3, // ems
+			tspan = text.text(null).append("tspan").attr("x", function(d) { return d.children || d._children ? -10 : 10; }).attr("y", 				y).attr("dy", dy + "em");     
+			while (word = words.pop()) {
+			    line.push(word);
+			    tspan.text(line.join(" "));
+			    var textWidth = tspan.node().getComputedTextLength();
+			    if (tspan.node().getComputedTextLength() > width) {
+				line.pop();
+				tspan.text(line.join(" "));
+				line = [word];
+				++lineNumber;
+				tspan = text.append("tspan").attr("x", function(d) { return d.children || d._children ? -10 : 10; }).attr("y", 0).attr("dy", lineNumber * lineHeight + dy*2 + "em").text(word);
+			    }
+			}
+		    });
+		}
 	    
 	    // Ajout de l'axe Y au SVG avec 6 éléments de légende en utilisant la fonction ticks (sinon D3JS en place autant qu'il peut).
 	    svgc.append("g")
@@ -778,38 +818,7 @@ function plot_map_chart(values) {
             		.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             		.text("Nbr de contributions");
 
-		d3.select('#select_resp'+'_'+theme).selectAll('option')
-		 	.data(csv_selected)
-			.enter()
-			.append('option')
-			.text(function(d) {return d.CODE_DEPT;})
-			.attr('value',function(d){return d.Id2;});
-			
-		d3.select('#select_resp_'+theme).on('change', function(){
-				quantile.domain([ d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }	)]);
-				
-		   		 csv_dep.forEach(function(e,i) {
-					d3.select("#d_"+theme+"_" + e.CODE_DEPT)
-						.attr("class", "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]) + "-9")
-						.on("mouseover", function(l) {
-							divmc.transition()        
-								.duration(200)      
-								.style("opacity", .9);
-							divmc.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-								+ "<b>Valeur : </b>" + Math.round(e[this.value.node().value]*100)/100 + "<br>")
-							.style("left", (d3.event.pageX + 30) + "px")     
-							.style("top", (d3.event.pageY - 30) + "px");});
-					
-					
-			});
-		    
-		    legendScale.domain([d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })]);
-		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
-		    title.html(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML +" en %");
-
-			});
-
-		function plot_quantile(quantile_s) {
+		function plot_quantile(quantile_s, resp) {
 
 			const svgc_c = d3.select("#chart_q_"+theme).append("svg")
 		    		.attr("id", "svgc_c"+theme)
@@ -868,7 +877,7 @@ function plot_map_chart(values) {
 			
 	    			//.padding(0.3);
 			
-		    	y.domain([0, d3.max(csv_select_q, function(d) { return d[data_selected_id2]; })]);
+		    	y.domain([0, d3.max(csv_select_q, function(d) { return d[resp]; })]);
 			
 		    
 		    // Ajout de l'axe Y au SVG avec 6 éléments de légende en utilisant la fonction ticks (sinon D3JS en place autant qu'il peut).
@@ -879,7 +888,7 @@ function plot_map_chart(values) {
 				.enter()
 				.append("circle")
 				.attr('cx', function(d){return x1(d.quantile);})
-				.attr("cy", function (d) {return y(d[data_selected_id2]);})
+				.attr("cy", function (d) {return y(d[resp]);})
 		   		.attr("r",5)
 				.style("opacity", .8)
 				.attr("class","q5-9")
@@ -890,6 +899,35 @@ function plot_map_chart(values) {
 		};
 
 		
+			
+		d3.select('#select_resp_'+theme).on('change', function(){
+				
+				quantile.domain([ d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }	)]);
+				
+		   		 csv_dep.forEach(function(e,i) {
+					d3.select("#d_"+theme+"_" + e.CODE_DEPT)
+						.attr("class", "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]) + "-9")
+						.on("mouseover", function(l) {
+							divmc.transition()        
+								.duration(200)      
+								.style("opacity", .9);
+							divmc.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
+								+ "<b>Valeur : </b>" + Math.round(e[d3.select("#select_resp_"+theme).node().value]*100)/100 + "<br>")
+							.style("left", (d3.event.pageX + 30) + "px")     
+							.style("top", (d3.event.pageY - 30) + "px");});
+					
+					
+			});
+		    
+		    legendScale.domain([d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })]);
+		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
+		    title.html(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML +" en %");
+		    d3.select('#svgc_c'+theme).remove();
+		    plot_quantile(quantile_select,d3.select("#select_resp_"+theme).node().value);
+			});
+
+		
+		
 	
 		d3.select("#chart_q_"+theme).append("button")
 			.attr("type","button")
@@ -898,8 +936,8 @@ function plot_map_chart(values) {
 			.on("click", function() {
 				quantile_select = "Revenu médian";
 				d3.select('#svgc_c'+theme).remove();
-				plot_quantile(quantile_select);
-				console.log(quantile_select);
+				plot_quantile(quantile_select,d3.select('#select_resp_'+theme).node().value);
+				
 			});
 		d3.select("#chart_q_"+theme).append("button")
 			.attr("type","button")
@@ -908,8 +946,8 @@ function plot_map_chart(values) {
 			.on("click", function() {
 				quantile_select = "Type d'agglomération";
 				d3.select('#svgc_c'+theme).remove();
-				plot_quantile(quantile_select);
-				console.log(quantile_select);
+				plot_quantile(quantile_select,d3.select('#select_resp_'+theme).node().value);
+				
 			});
 		d3.select("#chart_q_"+theme).append("button")
 			.attr("type","button")
@@ -918,8 +956,8 @@ function plot_map_chart(values) {
 			.on("click", function() {
 				quantile_select = "% Ouvriers";
 				d3.select('#svgc_c'+theme).remove();
-				plot_quantile(quantile_select);
-				console.log(quantile_select);
+				plot_quantile(quantile_select,d3.select('#select_resp_'+theme).node().value);
+				
 			});
 		d3.select("#chart_q_"+theme).append("button")
 			.attr("type","button")
@@ -928,8 +966,8 @@ function plot_map_chart(values) {
 			.on("click", function() {
 				quantile_select = "% Employés";
 				d3.select('#svgc_c'+theme).remove();
-				plot_quantile(quantile_select);
-				console.log(quantile_select);
+				plot_quantile(quantile_select,d3.select('#select_resp_'+theme).node().value);
+				
 			});
 		d3.select("#chart_q_"+theme).append("button")
 			.attr("type","button")
@@ -938,8 +976,8 @@ function plot_map_chart(values) {
 			.on("click", function() {
 				quantile_select = "% Retraités";
 				d3.select('#svgc_c'+theme).remove();
-				plot_quantile(quantile_select);
-				console.log(quantile_select);
+				plot_quantile(quantile_select,d3.select('#select_resp_'+theme).node().value);
+				
 			});
 		d3.select("#chart_q_"+theme).append("button")
 			.attr("type","button")
@@ -948,15 +986,15 @@ function plot_map_chart(values) {
 			.on("click", function() {
 				quantile_select = "% Cadre et prof. Int. Sup.";
 				d3.select('#svgc_c'+theme).remove();
-				plot_quantile(quantile_select);
+				plot_quantile(quantile_select,d3.select('#select_resp_'+theme).node().value);
 				
 			});
 			
 		
 		
-		var quantile_select = "% Ouvriers";
 		
-		plot_quantile(quantile_select);
+		
+		plot_quantile(quantile_select,d3.select("#select_resp_"+theme).node().value);
 	
 };
 
@@ -978,7 +1016,7 @@ d3.select("#select_chart_ecolo").on("change", function() {
 	d3.select("#chart_q_ecolo").selectAll("*").remove();
 	d3.select("#title_ecolo").remove();
 	//d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
-	data_id_selected = this.value.toString();
+	//data_id_selected = this.value.toString();
 	Promise.all(promises).then(plot_map_chart);
 	promises.pop('ecolo');
 
@@ -999,7 +1037,7 @@ d3.select("#select_chart_fisc").on("change", function() {
 	d3.select("#svgm_fisc").remove();
 	d3.select("#svgc_cfisc").remove();
 	d3.select("#chart_q_fisc").selectAll("*").remove();
-	d3.select("title_fisc").remove();
+	d3.select("#title_fisc").remove();
 	//d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
 	data_id_selected = this.value.toString();
 	Promise.all(promises).then(plot_map_chart);
@@ -1020,9 +1058,9 @@ d3.select("#select_chart_cit").on("change", function() {
 	d3.select("#svgm_cit").remove();
 	d3.select("#svgc_ccit").remove();
 	d3.select("#chart_q_cit").selectAll("*").remove();
-	d3.select("title_cit").remove();
+	d3.select("#title_cit").remove();
 	//d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
-	data_id_selected = this.value.toString();
+	//data_id_selected = this.value.toString();
 	Promise.all(promises).then(plot_map_chart);
 	promises.pop('cit');
 
@@ -1041,7 +1079,7 @@ d3.select("#select_chart_etat").on("change", function() {
 	d3.select("#svgm_etat").remove();
 	d3.select("#svgc_cetat").remove();
 	d3.select("#chart_q_etat").selectAll("*").remove();
-	d3.select("title_etat").remove();
+	d3.select("#title_etat").remove();
 	//d3.selectAll("#svgn").attr("class", dic_color["perc_"+this.value]);
 	data_id_selected = this.value.toString();
 	Promise.all(promises).then(plot_map_chart);
