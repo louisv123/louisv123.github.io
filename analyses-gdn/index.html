@@ -775,8 +775,8 @@ function plot_map_chart(values) {
 		
 		svgc.append("text")
             		.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-            		.attr("transform", "translate("\- (70) +","+((height_c + margin_c.top + margin_c.bottom)/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-            		.text("Value");
+            		.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            		.text("Nbr de contributions");
 
 		d3.select('#select_resp'+'_'+theme).selectAll('option')
 		 	.data(csv_selected)
@@ -852,7 +852,18 @@ function plot_map_chart(values) {
 				    .attr("dy", ".15em")
 				    .attr("y", "25");
 				    //.attr("transform", "rotate(-65)");
-
+				 svgc_c.append("text")
+            				.attr("text-anchor", "middle")  
+            				.attr("transform", "translate(200, 330)")  
+            				.text(quantile_s+" de la commune (décile)");
+				svgc_c.append("text")
+            				.attr("text-anchor", "middle")  
+					.style("opactiy", "0.5")
+					.style("font-size","0.7em")
+					.style("font-style", "italic")
+            				.attr("transform", "translate(200, 350)")  
+            				.text("(Le décile 9 correspond aux 10% des communes avec le "+quantile_s+" le plus élevé)");
+				
 			 }
 			
 	    			//.padding(0.3);
@@ -872,6 +883,10 @@ function plot_map_chart(values) {
 		   		.attr("r",5)
 				.style("opacity", .8)
 				.attr("class","q5-9")
+			svgc_c.append("text")
+            			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            			.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.text("% de réponses");
 		};
 
 		
