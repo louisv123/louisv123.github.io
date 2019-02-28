@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <body>
 <h1 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse des données du Grand Débat Nationale </h1>
-<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse Descriptive </h2>
+<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse descriptive de la participation </h2>
 <div class="row white">
 		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
 		<div>
@@ -25,11 +25,12 @@
 		</div>
 	</div>
 <div id="map"></div>
+<!--
 <h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse par traitement automatique du langage naturel des questions ouvertes</h2>
 
 <h4 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Principale questions du grand débat annalysées avec l'algorithme Word2Vec + projection t-SNE</h4>
 <div class="row white">
-		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
+		<div style="text-align: center;"></div> 
 		<div style="padding-bottom: 50px;">
 			<form>
 				<fieldset>
@@ -47,6 +48,7 @@
 		</div>
 	</div>
 <div id="network"></div>
+-->
 <h2 style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;"> Annalyse descriptive des questions fermées</h2>
 <h3 id="h_ecolo" style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;">La transition écologique</h3>
 <div class="row white">
@@ -62,7 +64,7 @@
 			</form>
 		</div>
 	</div>
-<div id="main_chart_ecolo" class="main">
+<div id="main_chart_ecolo" class="main_q">
 	<div id="chart_ecolo" class="chart_m"></div>
 </div>
 <div id="main_chart_q_ecolo" class="main">
@@ -99,7 +101,7 @@
 			</form>
 		</div>
 	</div>
-<div id="main_chart_fisc" class="main">
+<div id="main_chart_fisc" class="main_q">
 	<div id="chart_fisc" class="chart_m"></div>
 </div>
 <div id="main_chart_q_fisc" class="main">
@@ -136,7 +138,7 @@
 			</form>
 		</div>
 	</div>
-<div id="main_chart_cit" class="main">
+<div id="main_chart_cit" class="main_q">
 	<div id="chart_cit" class="chart_m"></div>
 </div>
 <div id="main_chart_q_cit" class="main">
@@ -171,7 +173,7 @@
 			</form>
 		</div>
 	</div>
-<div id="main_chart_etat" class="main">
+<div id="main_chart_etat" class="main_q">
 	<div id="chart_etat" class="chart_m"></div>
 </div>
 <div id="main_chart_q_etat" class="main">
@@ -339,6 +341,13 @@ div.tooltip_mc {
    
 }
 
+.main_q {
+    width: 1200px;
+    height: 500px;
+    margin: 0 auto;
+   
+}
+
 
 
 .chart_m {
@@ -483,6 +492,7 @@ var div = d3.select("body").append("div")
 
 //---------------------------------------
 
+/*
 const svgn = d3.select('#network').append("svg")
 	.attr("id", "svgn")
 	.attr("width", width)
@@ -564,7 +574,7 @@ d3.select("#select_network").on("change", function() {
 	
 
 		
-
+*/
 
 
 //--------------------------------------------------------------------------------
@@ -876,8 +886,11 @@ function plot_map_chart(values) {
 			 }
 			
 	    			//.padding(0.3);
-			
-		    	y.domain([0, d3.max(csv_select_q, function(d) { return d[resp]; })]);
+			var max_= d3.max(csv_select_q, function(d) { return d[resp]; });
+			max_=parseFloat(max_)*1.1;
+			var min_ =d3.min(csv_select_q, function(d) { return d[resp]; });
+			min_=parseFloat(min_)*0.9;
+		    	y.domain([min_,max_]);
 			
 		    
 		    // Ajout de l'axe Y au SVG avec 6 éléments de légende en utilisant la fonction ticks (sinon D3JS en place autant qu'il peut).
