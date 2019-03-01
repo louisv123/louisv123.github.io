@@ -315,6 +315,10 @@ div.tooltip_mc {
 	margin: auto;
 }
 
+.row {
+	width: 100%;
+}
+
 .svgc {
 	display: block;
 	margin: auto;
@@ -342,7 +346,7 @@ div.tooltip_mc {
 }
 
 .main_q {
-    width: 1200px;
+    width: 100%;
     height: 500px;
     margin: 0 auto;
    
@@ -351,21 +355,21 @@ div.tooltip_mc {
 
 
 .chart_m {
-	width: 1200px;
+	width:100%;
 	height: 500px;
 	margin: 0 auto;
         
 }
 .chart {
-	width: 600px;
+	width: 50%;
 	height: 500px;
 	float: left;
 }
 
 .map{
-    width: 600px;
+    width: 50%;
     height: 500px;
-    margin-left: 600px;
+    margin-left:50%;
 }
 
 </style>
@@ -669,7 +673,7 @@ function plot_map_chart(values) {
 		.attr('value',function(d){return d.Id2;});
 	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
 	var quantile = d3.scaleQuantile()
-		.domain([ d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })])
+		.domain([ parseFloat(d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100, parseFloat(d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100])
 		.range(d3.range(9));
 
 	var legend = svgm_c.append('g')
@@ -686,7 +690,7 @@ function plot_map_chart(values) {
 		.attr("class", function(d) { return "q" + d + "-9"; });
 			
 	var legendScale = d3.scaleLinear()
-		.domain([d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })])
+		.domain([parseFloat(d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100, parseFloat(d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100])
 		.range([0, 9 * 20]);
 		
 	var legendAxis = svgm_c.append("g")
@@ -699,13 +703,13 @@ function plot_map_chart(values) {
 		
 	csv_dep.forEach(function(e,i) {
 		d3.select("#d_"+theme+"_" + e.CODE_DEPT)
-			.attr("class", function(d) { return "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]) + "-9"; })
+			.attr("class", function(d) { return "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]*100) + "-9"; })
 			.on("mouseover", function(d) {
 				div.transition()        
 					.duration(200)      
 					.style("opacity", .9);
 				div.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-						+ "<b>Valeur : </b>" + Math.round(e[d3.select("#select_resp_"+theme).node().value]*100)/100 + "<br>")
+						+ "<b>Valeur : </b>" + Math.round(e[d3.select("#select_resp_"+theme).node().value]*10000)/100 + "<br>")
 					.style("left", (d3.event.pageX + 30) + "px")     
 					.style("top", (d3.event.pageY - 30) + "px");
 			})
@@ -887,9 +891,9 @@ function plot_map_chart(values) {
 			
 	    			//.padding(0.3);
 			var max_= d3.max(csv_select_q, function(d) { return d[resp]; });
-			max_=parseFloat(max_)*1.1;
+			max_=parseFloat(max_)*100*1.1;
 			var min_ =d3.min(csv_select_q, function(d) { return d[resp]; });
-			min_=parseFloat(min_)*0.9;
+			min_=parseFloat(min_)*100*0.9;
 		    	y.domain([min_,max_]);
 			
 		    
@@ -901,7 +905,7 @@ function plot_map_chart(values) {
 				.enter()
 				.append("circle")
 				.attr('cx', function(d){return x1(d.quantile);})
-				.attr("cy", function (d) {return y(d[resp]);})
+				.attr("cy", function (d) {return y(d[resp]*100);})
 		   		.attr("r",5)
 				.style("opacity", .8)
 				.attr("class","q5-9")
@@ -915,24 +919,24 @@ function plot_map_chart(values) {
 			
 		d3.select('#select_resp_'+theme).on('change', function(){
 				
-				quantile.domain([ d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }	)]);
+				quantile.domain([ parseFloat(d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100, parseFloat(d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }	))*100]);
 				
 		   		 csv_dep.forEach(function(e,i) {
 					d3.select("#d_"+theme+"_" + e.CODE_DEPT)
-						.attr("class", "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]) + "-9")
+						.attr("class", "department q" + quantile(+e[d3.select("#select_resp_"+theme).node().value]*100) + "-9")
 						.on("mouseover", function(l) {
 							divmc.transition()        
 								.duration(200)      
 								.style("opacity", .9);
 							divmc.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-								+ "<b>Valeur : </b>" + Math.round(e[d3.select("#select_resp_"+theme).node().value]*100)/100 + "<br>")
+								+ "<b>Valeur : </b>" + Math.round(e[d3.select("#select_resp_"+theme).node().value]*10000)/100 + "<br>")
 							.style("left", (d3.event.pageX + 30) + "px")     
 							.style("top", (d3.event.pageY - 30) + "px");});
 					
 					
 			});
 		    
-		    legendScale.domain([d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }), d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; })]);
+		    legendScale.domain([parseFloat(d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100,parseFloat(d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100]);
 		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
 		    title.html(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML +" en %");
 		    d3.select('#svgc_c'+theme).remove();
