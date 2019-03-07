@@ -829,10 +829,21 @@ function plot_map_chart(values) {
 		   		.attr("r",5)
 				.style("opacity", .8)
 				.attr("class","q5-9")
+			if (theme=="part") {
 			svgc_c.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             			.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-            			.text("% de réponses");
+            			.text("% de contributions");
+			}
+			else {
+			var selec_text = d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML;
+			svgc_c.append("text")
+            			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            			.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.text("% de "+selec_text)
+				.style("font-size",.3+(.6-.005*selec_text.length)+"em");
+			
+			}
 		};
 
 		
@@ -858,7 +869,7 @@ function plot_map_chart(values) {
 		    
 		    legendScale.domain([parseFloat(d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100,parseFloat(d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100]);
 		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
-		    title.html(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML +" en %");
+		    title.html("% de "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
 		    d3.select('#svgc_c'+theme).remove();
 		    plot_quantile(quantile_select,d3.select("#select_resp_"+theme).node().value);
 			});
