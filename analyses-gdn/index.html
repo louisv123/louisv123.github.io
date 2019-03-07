@@ -562,7 +562,7 @@ function plot_map_chart(values) {
 	var csv_selected = csv_theme.filter(function(d) {return d.Id1 ==data_id_selected;});
 	data_selected_c = csv_selected[0]['CODE_DEPT'];
 	
-	title.html("% de "+data_selected_c)
+	title.html("% de réponses : "+data_selected_c)
 	     .style("text-align","center");
 	}
 	
@@ -726,7 +726,7 @@ function plot_map_chart(values) {
 		    divc.transition()        
 		        .duration(200)      
 		        .style("opacity", .9);
-		    divc.html("Nbr de réponse : " + d.total)
+		    divc.html("Nbr de réponses : " + d.total)
 		        .style("left", (d3.event.pageX + 10) + "px")     
 		        .style("top", (d3.event.pageY - 50) + "px")
 			.style("height","15px");
@@ -822,10 +822,15 @@ function plot_map_chart(values) {
 				.enter()
 				.append("circle")
 				.attr('cx', function(d){return x1(d.quantile);})
-				.attr("cy", function (d) {return y(d[resp]*100);})
+				.attr("cy", function (d) {return y(min_*1.2);})
 		   		.attr("r",5)
 				.style("opacity", .8)
 				.attr("class","q5-9")
+				.transition()
+    					.duration(2000)
+    					.attr("cy", function(d) { return y(d[resp]*100); });
+    					
+
 			if (theme=="part") {
 			svgc_c.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -833,7 +838,7 @@ function plot_map_chart(values) {
             			.text("% de contributions");
 			}
 			else {
-			var selec_text = d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML;
+			var selec_text = "réponses : "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML;
 			svgc_c.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             			.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
@@ -870,7 +875,7 @@ function plot_map_chart(values) {
 		   	 title.html(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
 			}
 		    else {
-			title.html("% de "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
+			title.html("% de réponses : "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
 			}
 		    d3.select('#svgc_c'+theme).remove();
 		    plot_quantile(quantile_select,d3.select("#select_resp_"+theme).node().value);
