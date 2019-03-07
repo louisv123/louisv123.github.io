@@ -51,3 +51,8 @@ Etat_15,Etat_15a,Oui,22235,Faut-il donner plus d'autonomie aux fonctionnaires de
 Etat_15,Etat_15b,Non,9017,Faut-il donner plus d'autonomie aux fonctionnaires de terrain ?,,Organisation de l’Etat et des services publics
 Etat_17,Etat_17a,Oui,28236,Faut-il revoir le fonctionnement et la formation de l'administration ?,,Organisation de l’Etat et des services publics
 Etat_17,Etat_17b,Non,3120,Faut-il revoir le fonctionnement et la formation de l'administration ?,,Organisation de l’Etat et des services publics
+Part,Count_pourmil_CP,Nbr de contributions pour 1000 hbts,,,,Analyse descriptive de la participation
+Part,perc_fisca,% de contribution sur la fiscalité,,,,Analyse descriptive de la participation
+Part,perc_ecolo,% de contribution sur l’écologie,,,,Analyse descriptive de la participation
+Part,perc_cit,% de contribution sur la citoyenneté,,,,Analyse descriptive de la participation
+Part,perc_etat,% de contributions sur l’organisation des services publics,,,,Analyse descriptive de la participation

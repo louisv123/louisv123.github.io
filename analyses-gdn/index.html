@@ -2,7 +2,8 @@
 <meta charset="utf-8">
 <body>
 <h1 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Analyse des données du Grand Débat National </h1>
-<h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Analyse descriptive de la participation </h2>
+<h3 id="h_part" style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;">Analyse descriptive de la participation</h3>
+<div id="main_chart_q_part" class="main">
 <div class="row white">
 		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
 		<div>
@@ -10,7 +11,7 @@
 				<fieldset>
 					<div>
 						<label for="male">Donnée</label>
-						<select id="select_map">
+						<select id="select_resp_part">
 							<option value="Population">Population</option>
 							<option value="Count_all"]>Nbr de contribution</option>
 							<option value="Count_pourmil" selected="selected">Nbr de contribution pour 1000 hbts</option>
@@ -24,6 +25,9 @@
 			</form>
 		</div>
 	</div>
+<div id="chart_q_part" class="chart"></div>
+<div id="map_chart_part" class="map"></div>
+</div>
 <div id="map"></div>
 <!--
 <h2 style="text-align: center; font-family: 'Montserrat', sans-serif;"> Annalyse par traitement automatique du langage naturel des questions ouvertes</h2>
@@ -68,7 +72,6 @@
 	<div id="chart_ecolo" class="chart_m"></div>
 </div>
 <div id="main_chart_q_ecolo" class="main">
-<div id="main_chart_q_ecolo" class="main">
 	<div class="row white">
 		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
 		<div>
@@ -85,7 +88,6 @@
 	<div id="chart_q_ecolo" class="chart"></div>
 	<div id="map_chart_ecolo" class="map"></div>
 	
-	</div>
 </div>
 <h3 id="h_fisc" style="text-align: center; font-family: 'Montserrat', sans-serif; padding-top:50px;">La fisaclité et les dépenses publics</h3>
 <div class="row white">
@@ -195,8 +197,8 @@
 	
 </div>
 
-<p class="footer" style="padding-top: 150px;" > Sources : Données ouvertes du GDN, Base de données infra communales (INSEE), Base Filosofi (INSEE), Calcul des auteurs <br>
-*Les communes sont regroupés par code postal.</p>
+<p class="footer" style="padding-top: 150px;" > Sources : Données ouvertes du GDN, Base de données infra communales (INSEE), Base Filosofi (INSEE), Calculs des auteurs <br>
+*Les communes sont regroupées par code postal.</p>
 <p class="footer" > Authors : <a href="https://twitter.com/LouisVlln">LouisVlln</a> - <a href="https://twitter.com/PA_veillon">PA_veillon</a> </p>
 <p class="footer" > Contact : louis.veillon@gadz.org - paul-armand.veillon@polytechnique.org </p>
 
@@ -391,107 +393,18 @@ const projection = d3.geoConicConformal() // Lambert-93
 
 path.projection(projection); // Assign projection to path object
 
-// Create the DIV that will contain our map
-const svg = d3.select('#map').append("svg")
-	.attr("id", "svg")
-	.attr("width", width)
-	.attr("height", height)
-	.attr("class", "Blues");
-
-// Append the group that will contain our paths
-const deps = svg.append("g");
 
 var promises = [];
 promises.push(d3.json('france.json'));
-promises.push(d3.csv("GN_conso_dep_level.csv"));
-
-
-var data_selected= "Count_pourmil";
-
-
-
-function plot_map(values) {
-	const geojson = values[0];
-	const csv = values[1];
-	var features = svg
-		.selectAll("path")
-		.data(geojson.features)
-		.enter()
-		.append("path")
-		.attr('id', function(d) {return "d" + d.properties.CODE_DEPT;})
-		.attr("d", path);
-
-	// Quantile scales map an input domain to a discrete range, 0...max(population) to 1...9
-	var quantile = d3.scaleQuantile()
-		.domain([ d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
-		.range(d3.range(9));
-
-	var legend = svg.append('g')
-		.attr('transform', 'translate(525, 150)')
-		.attr('id', 'legend');
-		
-	legend.selectAll('.colorbar')
-		.data(d3.range(9))
-	  .enter().append('svg:rect')
-		.attr('y', function(d) { return d * 20 + 'px'; })
-		.attr('height', '20px')
-		.attr('width', '20px')
-		.attr('x', '0px')
-		.attr("class", function(d) { return "q" + d + "-9"; });
-			
-	var legendScale = d3.scaleLinear()
-		.domain([d3.min(csv, function(e) { return +e[data_selected]; }), d3.max(csv, function(e) { return +e[data_selected]; })])
-		.range([0, 9 * 20]);
-		
-	var legendAxis = svg.append("g")
-		.attr('transform', 'translate(550, 150)')
-		.call(d3.axisRight(legendScale).ticks(6));
-		
-	csv.forEach(function(e,i) {
-		d3.select("#d" + e.CODE_DEPT)
-			.attr("class", function(d) { return "department q" + quantile(+e[data_selected]) + "-9"; })
-			.on("mouseover", function(d) {
-				div.transition()        
-					.duration(200)      
-					.style("opacity", .9);
-				div.html("<b>Département : </b>" + e.CODE_DEPT + "<br>"
-						+ "<b>Valeur : </b>" + Math.round(e[data_selected]*100)/100 + "<br>")
-					.style("left", (d3.event.pageX + 30) + "px")     
-					.style("top", (d3.event.pageY - 30) + "px");
-			})
-			.on("mouseout", function(d) {
-				div.style("opacity", 0);
-				div.html("")
-					.style("left", "-500px")
-					.style("top", "-500px");
-			});
-	});
-};
-
-Promise.all(promises).then(plot_map);
-
 
 var dic_color = {};
-dic_color["Population"]="Blues";
-dic_color["Count_all"]="Blues";
-dic_color["Count_pourmil"]="Reds";
+
 dic_color["perc_fisc"]="Reds";
 dic_color["perc_ecolo"]="Greens";
 dic_color["perc_cit"]="YlOrBr";
 dic_color["perc_etat"]="PuBu";
-// Refresh colors on combo selection
-d3.select("#select_map").on("change", function() {
-	d3.selectAll("#svg").attr("class", dic_color[this.value]);
-	data_selected=this.value;
-	svg.selectAll("*").remove();
-	Promise.all(promises).then(plot_map);
-	
-});
+dic_color["perc_part"]="Blues"
 
-// Append a DIV for the tooltip
-var div = d3.select("body").append("div")   
-	.attr("class", "tooltip")               
-	.style("opacity", 0);
 
 
 //---------------------------------------
@@ -605,13 +518,22 @@ promises.push(d3.csv("INSEE_conso_QF_particpation.csv"));
 function plot_map_chart(values) {
 
 	const geojson = values[0];
-	const csv = values[2];
-	const csv_dep = values[3];
-        const csv_chart = values[4];
-	const theme = values[5];
+	const csv = values[1];
+	const csv_dep = values[2];
+        const csv_chart = values[3];
+	const theme = values[4];
 	
 	
 	
+	
+
+
+	var title = d3.select("#map_chart_"+theme).append("h5")
+				.attr("id","title_"+theme);
+	
+
+	csv_theme = csv.filter(function(d) {return d.theme ==d3.select("#h_"+theme).text();});
+
 	const svgc = d3.select("#chart_"+theme).append("svg")
     		.attr("id", "svgc_"+theme)
                 .attr("class","svgc")
@@ -621,12 +543,6 @@ function plot_map_chart(values) {
     		.attr("transform", "translate(" + margin_c.left + "," + margin_c.top + ")")
 		.attr("class",dic_color["perc_"+theme]);
 
-
-	var title = d3.select("#map_chart_"+theme).append("h5")
-				.attr("id","title_"+theme);
-	
-
-	    csv_theme = csv.filter(function(d) {return d.theme ==d3.select("#h_"+theme).text();});
 	    var quest_id= d3.nest()
 		.key(function(d) { return d.Id1; })
 		//.value(function(d) { return d.question; })
@@ -639,9 +555,16 @@ function plot_map_chart(values) {
 			.text(function(d) {return d.values[0].question;})
 			.attr('value',function(d){return d.key;});
 
+	if (theme == "part") {
+	var csv_selected = csv_theme;
+	}
+	else {
+	
+
 	var data_id_selected = d3.select('#select_chart_'+theme).node().value;
-	var data_selected_c = csv_theme.filter(function(d) {return d.Id1 ==data_id_selected;});
-	data_selected_c = data_selected_c[0]['CODE_DEPT'];
+	var csv_selected = csv_theme.filter(function(d) {return d.Id1 ==data_id_selected;});
+	}
+	data_selected_c = csv_selected[0]['CODE_DEPT'];
 
 	title.html(data_selected_c+" en %")
 	     .style("text-align","center");
@@ -660,7 +583,7 @@ function plot_map_chart(values) {
 		.attr('id', function(d) {return "d_"+theme+"_" + d.properties.CODE_DEPT;})
 		.attr("d", path);
 
-	var csv_selected = csv.filter(function (d) { return d.Id1 == data_id_selected});
+	
 
 
 	var quantile_select = "% Ouvriers";
@@ -791,10 +714,7 @@ function plot_map_chart(values) {
 	    svgc.append("g")
 		.call(d3.axisLeft(y).ticks(6));
 
-	    // Ajout des bars en utilisant les données de notre fichier data.tsv
-	    // La largeur de la barre est déterminée par la fonction x
-	    // La hauteur par la fonction y en tenant compte de la population
-	    // La gestion des events de la souris pour le popup
+	    
 	    svgc.selectAll(".bar")
 		.data(csv_selected)
 	    .enter().append("rect")
@@ -1015,7 +935,9 @@ function plot_map_chart(values) {
 	
 };
 
-
+promises.push('part');
+Promise.all(promises).then(plot_map_chart);
+promises.pop('part');
 
 promises.push('ecolo');
 Promise.all(promises).then(plot_map_chart);
