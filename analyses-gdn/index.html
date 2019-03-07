@@ -550,18 +550,22 @@ function plot_map_chart(values) {
 
 	if (theme == "part") {
 	var csv_selected = csv_theme;
+	data_selected_c = csv_selected[0]['CODE_DEPT'];
+	
+	title.html(data_selected_c)
+	     .style("text-align","center");
 	}
 	else {
 	
 
 	var data_id_selected = d3.select('#select_chart_'+theme).node().value;
 	var csv_selected = csv_theme.filter(function(d) {return d.Id1 ==data_id_selected;});
-	}
 	data_selected_c = csv_selected[0]['CODE_DEPT'];
-
-	title.html(data_selected_c+" en %")
+	
+	title.html("% de "+data_selected_c)
 	     .style("text-align","center");
-
+	}
+	
 	const svgm_c = d3.select('#map_chart_'+theme).append("svg")
 		.attr("id", "svgm_"+theme)
 		.attr("width", 600)
@@ -862,7 +866,12 @@ function plot_map_chart(values) {
 		    
 		    legendScale.domain([parseFloat(d3.min(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100,parseFloat(d3.max(csv_dep, function(e) { return +e[d3.select("#select_resp_"+theme).node().value]; }))*100]);
 		    legendAxis.call(d3.axisRight(legendScale).ticks(6));
-		    title.html("% de "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
+		    if (theme=="part") {
+		   	 title.html(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
+			}
+		    else {
+			title.html("% de "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML);
+			}
 		    d3.select('#svgc_c'+theme).remove();
 		    plot_quantile(quantile_select,d3.select("#select_resp_"+theme).node().value);
 			});
