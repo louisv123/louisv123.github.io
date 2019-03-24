@@ -219,7 +219,7 @@
     margin-top: 100px;
     margin-bottom:20px;
     height: 100px;
-    width: 100%;
+    width:400px;
     border-radius: 2% / 2%;
     background-size:auto;
     color: white;
@@ -234,7 +234,7 @@
   background-color:#154463;
   height:40px;
   color: white;
-  width:100;
+
   font-family: 'Montserrat', sans-serif;
   padding-top:20px;
   padding-left:20px;
@@ -312,7 +312,7 @@ div.tooltip {
 	color:#fff;
 	background-color:#000;
 	font: 12px sans-serif;
-	max-width: 300px;
+	max-width: 250px;
 	height: 40px;
 }
 
@@ -328,7 +328,7 @@ div.tooltip_c {
 	color:#fff;
 	background-color:#000;
 	font: 12px sans-serif;
-	max-width: 300px;
+	max-width: 250px;
 	height: 40px;
 }
 
@@ -344,7 +344,7 @@ div.tooltip_n {
 	color:#fff;
 	background-color:#000;
 	font: 12px sans-serif;
-	max-width: 300px;
+	max-width: 250px;
 	height: 40px;
 }
 
@@ -360,7 +360,7 @@ div.tooltip_mc {
 	color:#fff;
 	background-color:#000;
 	font: 12px sans-serif;
-	max-width: 300px;
+	max-width: 250px;
 	height: 40px;
 }
 
@@ -663,7 +663,7 @@ function plot_map_chart(values) {
 		.range(d3.range(9));
 
 	var legend = svgm_c.append('g')
-		.attr('transform', 'translate(525, 150)')
+		.attr('transform', 'translate(450, 150)')
 		.attr('id', 'legend');
 		
 	legend.selectAll('.colorbar')
@@ -681,7 +681,7 @@ function plot_map_chart(values) {
 		
 	var legendAxis = svgm_c.append("g")
                 .attr("id","legendt")
-		.attr('transform', 'translate(550, 150)')
+		.attr('transform', 'translate(475, 150)')
 		.call(d3.axisRight(legendScale).ticks(6));
 
 	
