@@ -896,7 +896,7 @@ function plot_map_chart(values) {
 			if (theme=="part") {
 			svgc_c.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-            			.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.attr("transform", "translate(-35, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             			.text(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML)
 				.style("font-size",.99-.004*d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML.length+"em");
 			}
@@ -904,7 +904,7 @@ function plot_map_chart(values) {
 			var selec_text = "réponses : "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML;
 			svgc_c.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-            			.attr("transform", "translate(-70, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.attr("transform", "translate(-35, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             			.text("% de "+selec_text)
 				.style("font-size",.3+(.6-.005*selec_text.length)+"em");
 			
