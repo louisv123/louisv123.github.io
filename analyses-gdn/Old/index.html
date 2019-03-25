@@ -9,7 +9,7 @@
 
 	<div style="margin: 0 auto; width:100px; height:00px;">
 	  <p>
-
+	          Nous vous proposons
 	          
 	          
 	  </p>
@@ -81,22 +81,6 @@
 	  <div id="map_chart_ecolo" class="map" ></div> 
 	</div>
 </div>
-
-<div id="main_chart_t_ecolo" class="main">
-	<div class="row_white" style="margin-top: 90px;">
-	  <div style="text-align: center;"></div> 
-	  <div>
-						<label >Analyse des titres</label>
-						</div>
-		</div>
-			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
-			  			  			  			  <div id="button1_ecolo" class="button_t" style="width:50%; margin-left:22%; "></div>
-			  <div id="button_ecolo" class="button_t" style="width:50%; margin-left:20%; "></div>
-	  <div id="chart_t_ecolo" class="chart_t"></div>
-
-	</div>
-</div>	
-
 	<div style="margin: 0 auto; width:100px; height:100px;">
 	  		<img alt="" class="separator" src="https://granddebat.fr/media/default/0001/01/a18fa132d2853aa1636bbd61ccc017bc97f02187.png" height="2px" 	style="margin-top: 60px;">	</div>
 
@@ -134,23 +118,6 @@
 	  <div id="map_chart_fisc" class="map"></div>
 	</div>
 </div>
-
-<div id="main_chart_t_fisc" class="main">
-	<div class="row_white" style="margin-top: 90px;">
-	  <div style="text-align: center;"></div> 
-	  <div>
-						<label >Analyse des titres</label>
-						</div>
-		</div>
-			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
-			  			  			  <div id="button1_fisc" class="button_t" style="width:50%; margin-left:22%; "></div>
-			  <div id="button_fisc" class="button_t" style="width:50%; margin-left:20%; "></div>
-	  <div id="chart_t_fisc" class="chart_t"></div>
-
-	</div>
-	
-
-</div>
 	<div style="margin: 0 auto; width:100px; height:100px;">
 	  		<img alt="" class="separator" src="https://granddebat.fr/media/default/0001/01/a18fa132d2853aa1636bbd61ccc017bc97f02187.png" height="2px" 	style="margin-top: 60px;">	</div>
 	
@@ -186,23 +153,6 @@
 	  <div id="map_chart_cit" class="map"></div>
 	</div>
 </div>
-
-<div id="main_chart_t_cit" class="main">
-	<div class="row_white" style="margin-top: 90px;">
-	  <div style="text-align: center;"></div> 
-	  <div>
-						<label >Analyse des titres</label>
-						</div>
-		</div>
-			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
-			  			  <div id="button1_cit" class="button_t" style="width:50%; margin-left:22%; "></div>
-			  <div id="button_cit" class="button_t" style="width:50%; margin-left:20%; "></div>
-	  <div id="chart_t_cit" class="chart_t"></div>
-
-	</div>
-	
-
-</div>
 	<div style="margin: 0 auto; width:100px; height:100px;">
 	  		<img alt="" class="separator" src="https://granddebat.fr/media/default/0001/01/a18fa132d2853aa1636bbd61ccc017bc97f02187.png" height="2px" 	style="margin-top: 60px;">	</div>
 
@@ -232,24 +182,6 @@
 	  <div id="chart_q_etat" class="chart"></div>
 	  <div id="map_chart_etat" class="map"></div>
 	</div>
-	
-
-</div>
-
-<div id="main_chart_t_etat" class="main">
-	<div class="row_white" style="margin-top: 90px;">
-	  <div style="text-align: center;"></div> 
-	  <div>
-						<label >Analyse des titres</label>
-						</div>
-		</div>
-			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
-			  <div id="button1_etat" class="button_t" style="width:50%; margin-left:22%; "></div>
-			  <div id="button_etat" class="button_t" style="width:50%; margin-left:20%; "></div>
-	  <div id="chart_t_etat" class="chart_t"></div>
-
-	</div>
-	
 
 </div>
 	<div style="margin: 0 auto; width:100px; height:100px;">
@@ -308,18 +240,9 @@
   padding-left:20px;
 }
 
-.chart_t{
-  width: 100%;
-  margin: 0 auto;
-}
-.svgc_t{
-  width:100%;
-  margin: 0 auto;
-}
 body {
   background-color:  #F6F6F6;
   width:100%;
-  min-width:1100px;
 }
 #info {
 	margin-top: 50px;
@@ -459,8 +382,6 @@ div.tooltip_mc {
 	display: block;
 	margin: auto;
 }
-
-
 
 .svgm {
 	display: block;
@@ -639,9 +560,6 @@ d3.select("#select_network").on("change", function() {
 const margin_c = {top: 70, right: 20, bottom: 250, left: 120},
     width_c = 600 - margin_c.left - margin_c.right,
     height_c = 600 - margin_c.top - margin_c.bottom;
-const margin_t = {top: 70, right: 20, bottom: 50, left: 300},    
-    height_t= 400 - margin_t.top - margin_t.bottom,
-    width_t = 900 - margin_c.left - margin_c.right;
 
 const x = d3.scaleBand()
     .range([0, width_c])
@@ -656,7 +574,6 @@ const y = d3.scaleLinear()
 promises.push(d3.csv("bd_questions_1.csv"));
 promises.push(d3.csv("DEP_conso_QF_particpation.csv"));
 promises.push(d3.csv("INSEE_conso_QF_particpation.csv"));
-promises.push(d3.csv("plot_word.csv"));
 
 
 function plot_map_chart(values) {
@@ -665,8 +582,7 @@ function plot_map_chart(values) {
 	const csv = values[1];
 	const csv_dep = values[2];
   const csv_chart = values[3];
-  const csv_text = values[4];
-	const theme = values[5];
+	const theme = values[4];
 	
 	
 
@@ -729,7 +645,7 @@ function plot_map_chart(values) {
 		.attr('id', function(d) {return "d_"+theme+"_" + d.properties.CODE_DEPT;})
 		.attr("d", path);
 
-
+	
 
 
 	var quantile_select = "% Ouvriers";
@@ -748,8 +664,6 @@ function plot_map_chart(values) {
 	var legend = svgm_c.append('g')
 		.attr('transform', 'translate(450, 150)')
 		.attr('id', 'legend');
-		
-
 		
 	legend.selectAll('.colorbar')
 		.data(d3.range(9))
@@ -996,28 +910,27 @@ function plot_map_chart(values) {
 			}
 		};
 
-		function plot_quantile2(quantile_s) {
+		function plot_quantile2(quantile_s, resp) {
 
-			const svgc_t = d3.select("#chart_t_"+theme).append("svg")
-		    		.attr("id", "svgc_t"+theme)
-				.attr("class","svgc_t")
-		    		.attr("width", width_t + margin_c.left + margin_c.right)
-		    		.attr("height", height_t + margin_t.top + margin_t.bottom)
+			const svgc_c = d3.select("#chart_q_"+theme).append("svg")
+		    		.attr("id", "svgc_c"+theme)
+				.attr("class","svgc_c")
+		    		.attr("width", width_c + margin_c.left + margin_c.right)
+		    		.attr("height", height_c + margin_c.top + margin_c.bottom)
 		    		.append("g")
-		    		.attr("transform", "translate(" + margin_t.left + "," + margin_c.top + ")")
+		    		.attr("transform", "translate(" + margin_c.left + "," + margin_c.top + ")")
 				.attr("class",dic_color["perc_"+theme]);
 
-			var csv_select_q = csv_text.filter(function (d) { return d.label == quantile_s && d.theme == theme;});
-
+			var csv_select_q = csv_chart.filter(function (d) { return d.label == quantile_s;});
 	
 			if (quantile_s =="Type d'agglomération") {
 				var x1 = d3.scaleBand()
-	    			.range([0, width_t])
+	    			.range([0, width_c])
 	    			.padding(0.3)
-				.domain(csv_select_q.map(function(d) { return d.label; }));
+				.domain(csv_select_q.map(function(d) { return d.label_q; }));
 			
-				svgc_t.append("g")
-				.attr("transform", "translate(0," + height_t + ")")
+				svgc_c.append("g")
+				.attr("transform", "translate(0," + height_c + ")")
 				.call(d3.axisBottom(x1).tickSize(0))
 				.selectAll("text")	
 				    .style("text-anchor", "end")
@@ -1029,11 +942,11 @@ function plot_map_chart(values) {
             		
 			else 	{	
 			var x1 = d3.scaleBand()
-	    			.range([0, width_t])
+	    			.range([0, width_c])
 	    			.padding(0.3)
-				.domain(csv_select_q.map(function(d) { return d.word; }));
-				svgc_t.append("g")
-				.attr("transform", "translate(0,140)")
+				.domain(csv_select_q.map(function(d) { return d.quantile; }));
+				svgc_c.append("g")
+				.attr("transform", "translate(0," + height_c + ")")
 				.call(d3.axisBottom(x1).tickSize(0))
 				.selectAll("text")	
 				    .style("text-anchor", "end")
@@ -1042,53 +955,55 @@ function plot_map_chart(values) {
 				    .attr("y", "0")
             .attr("font-weight",  "bold")
 				    .attr("transform", "rotate(-45)");
-				    
-				 svgc_t.append("text")
+				 svgc_c.append("text")
             				.attr("text-anchor", "middle")  
-            				.attr("transform", "translate(400, 300)")  
+            				.attr("transform", "translate(230, 380)")  
             				.text(quantile_s+" dans la commune");
 
 				
 			 }
 			
 	    			//.padding(0.3);
-			var max_= d3.max(csv_select_q, function(d) { return d.coef; });
+			var max_= d3.max(csv_select_q, function(d) { return d[resp]; });
 			max_=parseFloat(max_)*100*1.1;
-			var min_ =d3.min(csv_select_q, function(d) { return d.coef; });
+			var min_ =d3.min(csv_select_q, function(d) { return d[resp]; });
 			min_=parseFloat(min_)*100*0.9;
-			    y.domain([-100,100]);
-			    //y.range([0, 100]);
-		    	
+		    	y.domain([min_,max_]);
 			
 		    
 		    // Ajout de l'axe Y au SVG avec 6 éléments de légende en utilisant la fonction ticks (sinon D3JS en place autant qu'il peut).
-		    	svgc_t.append("g")
+		    	svgc_c.append("g")
 				.call(d3.axisLeft(y).ticks(6));
-			svgc_t.selectAll("circle")
+			svgc_c.selectAll("circle")
 				.data(csv_select_q)
 				.enter()
 				.append("circle")
-				.attr('cx', function(d){return x1(d.word);})
+				.attr('cx', function(d){return x1(d.quantile);})
 				.attr("cy", function (d) {return y(min_*1.2);})
 		   		.attr("r",5)
 				.style("opacity", .8)
 				.attr("class","q5-9")
-			
 				.transition()
     					.duration(2000)
-    					.attr("cy", function(d) { return y(d.coef*100); });
-    			    		
+    					.attr("cy", function(d) { return y(d[resp]*100); });
     					
 
-		
-			var selec_text = "Corrélation avec "+quantile_s;
-			svgc_t.append("text")
+			if (theme=="part") {
+			svgc_c.append("text")
+            			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            			.attr("transform", "translate(-35, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.text(d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML)
+				.style("font-size",.99-.004*d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML.length+"em");
+			}
+			else {
+			var selec_text = "réponses : "+d3.select("#select_resp_"+theme).node().selectedOptions[0].innerHTML;
+			svgc_c.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             			.attr("transform", "translate(-30, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-            			.text(selec_text)
+            			.text("% de "+selec_text)
 				.style("font-size",.3+(.6-.005*selec_text.length)+"em");
 			
-			
+			}
 		};
 			
 		d3.select('#select_resp_'+theme).on('change', function(){
@@ -1186,7 +1101,6 @@ function plot_map_chart(values) {
 				
 			});
 			
-
 			d3.select("#chart_q_"+theme).append("button")
 		.attr("type","button1")
 			.attr("class","button1")
@@ -1240,114 +1154,11 @@ function plot_map_chart(values) {
 				
 			});	
 			
-	
-	
-	//New button	
-			d3.select("#button1_"+theme).append("button")
-			.attr("type","button1")
-			.attr("class","button1")
-			.text("Revenu médian")
-			.on("click", function() {
-				quantile_select = "Revenu médian";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-				
-			});
-
-		d3.select("#button1_"+theme).append("button")
-			.attr("type","button1")
-			.attr("class","button1")
-			.text("% Ouvriers")
-			.on("click", function() {
-				quantile_select = "% Ouvriers";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-				
-			});
-		d3.select("#button1_"+theme).append("button")
-			.attr("type","button1")
-			.attr("class","button1")
-			.text("% Employés")
-			.on("click", function() {
-				quantile_select = "% Employés";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-				
-			});
-		d3.select("#button1_"+theme).append("button")
-			.attr("type","button1")
-			.attr("class","button1")
-			.text("% Retraités")
-			.on("click", function() {
-				quantile_select = "% Retraités";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});
-		d3.select("#button1_"+theme).append("button")
-			.attr("type","button1")
-			.attr("class","button1")
-			.text("% Cadre et prof. Int. Sup.")
-			.on("click", function() {
-				quantile_select = "% Cadre et prof. Int. Sup.";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});
-			
-			d3.select("#button_"+theme).append("button")
-		.attr("type","button1")
-			.attr("class","button1")
-			.text("% Abstention")
-			.on("click", function() {
-				quantile_select = "% Abstention";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});	
-			
-				d3.select("#button_"+theme).append("button")
-		.attr("type","button1")
-			.attr("class","button1")
-			.text("% François Fillon")
-			.on("click", function() {
-				quantile_select = "% Vote François Fillon";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});		
-		d3.select("#button_"+theme).append("button")
-		.attr("type","button1")
-			.attr("class","button1")
-			.text("% Marine Le Pen")
-			.on("click", function() {
-				quantile_select = "% Vote Marine Le Pen";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});
-			
-			d3.select("#button_"+theme).append("button")
-		.attr("type","button1")
-			.attr("class","button1")
-			.text("% Emmanuel Macron")
-			.on("click", function() {
-				quantile_select = "% Vote Emmanuel Macron";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});	
-		d3.select("#button_"+theme).append("button")
-			.attr("type","button1")
-			.attr("class","button1")
-			.text("% Jean-Luc Mélenchon")
-			.on("click", function() {
-				quantile_select = "% Vote Jean-Luc Mélenchon";
-				d3.select('#svgc_t'+theme).remove();
-				plot_quantile2(quantile_select);
-			});	
-			
-		
 		
 		
 		
 		
 		plot_quantile(quantile_select,d3.select("#select_resp_"+theme).node().value);
-		plot_quantile2(quantile_select);
 	
 };
 
