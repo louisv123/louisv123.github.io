@@ -28,7 +28,7 @@
 		<div style="text-align: center;"></div> <!-- Empty to center the next one -->
 		<div>
 			
-					<div href="#participation">
+					<div id="participation">
 						<label>Données</label>
 						<select id="select_resp_part">
 						</select>
@@ -87,7 +87,7 @@
 	<div class="row_white" style="margin-top: 90px;">
 	  <div style="text-align: center;"></div> 
 	  <div>
-						<label >Analyse des titres</label>
+						<label >Description des titres des contributions</label>
 						</div>
 		</div>
 			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
@@ -140,7 +140,7 @@
 	<div class="row_white" style="margin-top: 90px;">
 	  <div style="text-align: center;"></div> 
 	  <div>
-						<label >Analyse des titres</label>
+						<label >Description des titres des contributions</label>
 						</div>
 		</div>
 			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
@@ -192,7 +192,7 @@
 	<div class="row_white" style="margin-top: 90px;">
 	  <div style="text-align: center;"></div> 
 	  <div>
-						<label >Analyse des titres</label>
+						<label >Description des titres des contributions</label>
 						</div>
 		</div>
 			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
@@ -241,7 +241,7 @@
 	<div class="row_white" style="margin-top: 90px;">
 	  <div style="text-align: center;"></div> 
 	  <div>
-						<label >Analyse des titres</label>
+						<label >Description des titres des contributions</label>
 						</div>
 		</div>
 			<div style="background-color: #fff; padding-bottom:150px;  padding-top:20px;">
@@ -494,6 +494,11 @@ div.tooltip_mc {
    
 }
 
+.arrow{
+		stroke-width:2;
+		stroke:#000;
+		stroke-dasharray:5, 5;
+	}
 
 
 .chart_m {
@@ -1030,6 +1035,7 @@ function plot_map_chart(values) {
 				}
             		
 			else 	{	
+	
 			var x1 = d3.scaleBand()
 	    			.range([0, width_t])
 	    			.padding(0.3)
@@ -1050,6 +1056,16 @@ function plot_map_chart(values) {
             				.attr("transform", "translate(400, 300)")  
             				.text(quantile_s+" dans la commune");
 
+          svgc_t.append("text")
+            				.attr("text-anchor", "middle") 
+            				.attr("font-size", "10px")
+            				.attr("transform", "translate(400, 315)")  
+            				.text("Note de lecture: les mots au-dessus de l'axe apparaissent plus que la moyenne dans les titres d'un participant habitant dans une commune avec un "+quantile_s+" élevé,");
+            				svgc_t.append("text")
+            				.attr("text-anchor", "middle") 
+            				.attr("font-size", "10px")
+            				.attr("transform", "translate(370, 325)")  
+            				.text("les mots au-dessous de l'axe apparaissent moins que la moyenne dans les titres d'un participant habitant dans une commune avec un  "+quantile_s+" élevé.");
 				
 			 }
 			
@@ -1064,8 +1080,24 @@ function plot_map_chart(values) {
 			
 		    
 		    // Ajout de l'axe Y au SVG avec 6 éléments de légende en utilisant la fonction ticks (sinon D3JS en place autant qu'il peut).
-		    	svgc_t.append("g")
-				.call(d3.axisLeft(y).ticks(6));
+        svgc_t.append('line')
+          .attr("class","arrow")
+          .attr("marker-end","url(#arrow)") 
+				      .attr("x1",-5)
+					    .attr("y1",-30)
+					  .attr("x2",-5)
+					  .attr("y2",130);
+				 
+				 svgc_t.append('line')
+          .attr("class","arrow")
+          .attr("marker-end","url(#arrow)") 
+				      .attr("x1",-5)
+					    .attr("y1",150)
+					  .attr("x2",-5)
+					  .attr("y2",300);	  
+
+					  
+
 			svgc_t.selectAll("circle")
 				.data(csv_select_q)
 				.enter()
@@ -1083,14 +1115,19 @@ function plot_map_chart(values) {
     					
 
 		
-			var selec_text = "Corrélation avec "+quantile_s;
+			var selec_text = "Fréquence inf. à la moyenne";
 			svgc_t.append("text")
             			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-            			.attr("transform", "translate(-30, 120)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.attr("transform", "translate(-20, 220)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             			.text(selec_text)
 				.style("font-size",.3+(.6-.005*selec_text.length)+"em");
 			
-			
+				var selec_text2 = "Fréquence sup. à la moyenne";
+			svgc_t.append("text")
+            			.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            			.attr("transform", "translate(-20, 40)rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            			.text(selec_text2)
+				.style("font-size",.3+(.6-.005*selec_text2.length)+"em");
 		};
 			
 		d3.select('#select_resp_'+theme).on('change', function(){

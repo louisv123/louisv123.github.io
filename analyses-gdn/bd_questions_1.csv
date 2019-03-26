@@ -51,7 +51,7 @@
 50,"Etat_15","Etat_15b","Non",11718,"Faut-il donner plus d'autonomie aux fonctionnaires de terrain ?",NA,"Organisation de l’Etat et des services publics"
 51,"Etat_17","Etat_17a","Oui",37481,"Faut-il revoir le fonctionnement et la formation de l'administration ?",NA,"Organisation de l’Etat et des services publics"
 52,"Etat_17","Etat_17b","Non",4034,"Faut-il revoir le fonctionnement et la formation de l'administration ?",NA,"Organisation de l’Etat et des services publics"
-53,"Part","Count_pourmil_CP","Nbr de contributions pour 100 000 hbts",NA,"",NA,"Profil des contributeurs"
+53,"Part","Count_pourmil_CP","Nbr de contributions pour 1000 hbts",NA,"",NA,"Profil des contributeurs"
 54,"Part","perc_fisca","% de contribution sur la fiscalité",NA,"",NA,"Profil des contributeurs"
 55,"Part","perc_ecolo","% de contribution sur l’écologie",NA,"",NA,"Profil des contributeurs"
 56,"Part","perc_cit","% de contribution sur la citoyenneté",NA,"",NA,"Profil des contributeurs"
